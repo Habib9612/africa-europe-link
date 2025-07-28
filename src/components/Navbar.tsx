@@ -12,7 +12,9 @@ const Navbar = () => {
     { name: "Find Loads", href: "/loads" },
     { name: "Find Trucks", href: "/trucks" },
     { name: "Tracking", href: "/tracking" },
-    { name: "Pricing", href: "/pricing" },
+    { name: "Shipper Portal", href: "/shipper" },
+    { name: "Carrier Portal", href: "/carrier" },
+    { name: "Admin", href: "/admin" },
   ];
 
   const isActive = (href: string) => location.pathname === href;
