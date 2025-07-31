@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Truck, Package, MapPin, Zap } from "lucide-react";
-import heroImage from "@/assets/hero-logistics-new.jpg";
 
 const Hero = () => {
   const stats = [
@@ -12,67 +11,114 @@ const Hero = () => {
   ];
 
   return (
-    <div className="relative overflow-hidden">
-      {/* Hero Background */}
-      <div className="absolute inset-0">
-        <img
-          src={heroImage}
-          alt="Logistics connecting Europe and Africa"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-black/40" />
-      </div>
-
+    <div className="relative overflow-hidden bg-gradient-hero">
       {/* Hero Content */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-        <div className="text-center">
-          <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6">
-            Connecting{" "}
-            <span className="bg-gradient-to-r from-blue-400 to-orange-400 bg-clip-text text-transparent">
-              Europe & Africa
-            </span>
-            <br />
-            Through Smart Logistics
-          </h1>
-          <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
-            AI-powered platform connecting carriers and shippers across Morocco, 
-            bridging European and African markets with intelligent matching and 
-            real-time tracking.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Button variant="hero" size="lg" className="text-lg">
-              Find Trucks Now
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button variant="outline" size="lg" className="text-lg bg-white/10 backdrop-blur-sm text-white border-white/30 hover:bg-white/20">
-              Post Your Load
-            </Button>
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-40">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Left Content */}
+          <div>
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm mb-8">
+              <Zap className="h-4 w-4 mr-2" />
+              AI-Powered Logistics Platform
+            </div>
+            
+            <h1 className="text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+              Connect Shippers{" "}
+              <span className="text-blue-300">
+                with Carriers
+              </span>
+              <br />
+              Instantly
+            </h1>
+            
+            <p className="text-xl text-white/90 mb-8 leading-relaxed">
+              Our AI-powered platform matches shippers with the perfect carriers based on location, 
+              vehicle type, and delivery requirements.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 mb-12">
+              <Button size="lg" className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 text-lg font-semibold">
+                I'm a Shipper
+              </Button>
+              <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg font-semibold">
+                I'm a Carrier
+              </Button>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+              {stats.map((stat, index) => (
+                <div key={index} className="text-center">
+                  <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
+                  <div className="text-sm text-white/70">{stat.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            {stats.map((stat, index) => (
-              <Card key={index} className="bg-white/10 backdrop-blur-sm border-white/20 p-6 text-center shadow-glow">
-                <stat.icon className="h-8 w-8 text-white mx-auto mb-3" />
-                <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
-                <div className="text-sm text-gray-200">{stat.label}</div>
-              </Card>
-            ))}
+          {/* Right Content - AI Matching Widget */}
+          <div className="bg-white rounded-2xl p-8 shadow-2xl">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                <Zap className="h-6 w-6 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900">AI-Powered Carrier Matching</h3>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Origin</label>
+                <input 
+                  type="text" 
+                  placeholder="Enter pickup city or location"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Destination</label>
+                <input 
+                  type="text" 
+                  placeholder="Enter delivery city or location"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+
+              <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 text-lg font-semibold">
+                Find Carriers
+              </Button>
+            </div>
+
+            <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+              <div className="flex items-center gap-2 mb-3">
+                <Zap className="h-5 w-5 text-blue-500" />
+                <span className="font-semibold text-blue-900">How our matching works</span>
+              </div>
+              <p className="text-sm text-blue-800 mb-3">
+                Our AI algorithm analyzes multiple factors to find your perfect carrier match:
+              </p>
+              
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Location proximity</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Vehicle compatibility</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Performance history</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Price optimization</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Wave separator */}
-      <div className="absolute bottom-0 left-0 right-0">
-        <svg
-          className="w-full h-16 text-background"
-          viewBox="0 0 1440 64"
-          fill="currentColor"
-          preserveAspectRatio="none"
-        >
-          <path d="M0,32L48,37.3C96,43,192,53,288,58.7C384,64,480,64,576,58.7C672,53,768,43,864,37.3C960,32,1056,32,1152,37.3C1248,43,1344,53,1392,58.7L1440,64L1440,64L1392,64C1344,64,1248,64,1152,64C1056,64,960,64,864,64C768,64,672,64,576,64C480,64,384,64,288,64C192,64,96,64,48,64L0,64Z" />
-        </svg>
       </div>
     </div>
   );
