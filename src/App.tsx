@@ -15,6 +15,9 @@ import CarrierDashboard from "./pages/CarrierDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import Tracking from "./pages/Tracking";
 import NotFound from "./pages/NotFound";
+import Messages from "./pages/Messages";
+import Settings from "./pages/Settings";
+import Analytics from "./pages/Analytics";
 import AIAssistant from "./components/AIAssistant";
 
 const queryClient = new QueryClient();
@@ -90,7 +93,7 @@ const App = () => (
               path="/messages" 
               element={
                 <ProtectedRoute>
-                  <div className="p-6">Messages - Coming Soon</div>
+                  <Messages />
                 </ProtectedRoute>
               } 
             />
@@ -98,7 +101,7 @@ const App = () => (
               path="/settings" 
               element={
                 <ProtectedRoute>
-                  <div className="p-6">Settings - Coming Soon</div>
+                  <Settings />
                 </ProtectedRoute>
               } 
             />
@@ -106,7 +109,7 @@ const App = () => (
               path="/analytics" 
               element={
                 <ProtectedRoute>
-                  <div className="p-6">Analytics - Coming Soon</div>
+                  <Analytics />
                 </ProtectedRoute>
               } 
             />

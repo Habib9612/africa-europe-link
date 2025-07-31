@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -112,28 +113,27 @@ const ShipperDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="bg-gradient-hero py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-white mb-2">
-                Shipper Dashboard
-              </h1>
-              <p className="text-white/90">
-                Manage your shipments and track performance
-              </p>
+    <DashboardLayout>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="bg-gradient-hero py-12 -mx-6 -mt-6 mb-6">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold text-white mb-2">
+                  Shipper Dashboard
+                </h1>
+                <p className="text-white/90">
+                  Manage your shipments and track performance
+                </p>
+              </div>
+              <Button variant="accent" size="lg">
+                <Plus className="h-5 w-5 mr-2" />
+                New Shipment
+              </Button>
             </div>
-            <Button variant="accent" size="lg">
-              <Plus className="h-5 w-5 mr-2" />
-              New Shipment
-            </Button>
           </div>
         </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {stats.map((stat, index) => (
@@ -305,7 +305,7 @@ const ShipperDashboard = () => {
           </div>
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 };
 
