@@ -1,66 +1,103 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Truck, Globe } from "lucide-react";
+import { Truck, Menu, X, User, LogOut } from "lucide-react";
+import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { Badge } from "@/components/ui/badge";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuLabel, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation();
-
-  const navigation = [
-    { name: "Home", href: "/" },
-    { name: "Find Loads", href: "/loads" },
-    { name: "Find Trucks", href: "/trucks" },
-    { name: "Tracking", href: "/tracking" },
-    { name: "Shipper Portal", href: "/shipper" },
-    { name: "Carrier Portal", href: "/carrier" },
-    { name: "Admin", href: "/admin" },
-  ];
-
-  const isActive = (href: string) => location.pathname === href;
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, profile, signOut } = useAuth();
 
   return (
     <nav className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50 shadow-card">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2">
               <div className="bg-gradient-hero p-2 rounded-lg shadow-glow">
                 <Truck className="h-6 w-6 text-white" />
               </div>
               <span className="text-xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                LogiConnect
+                LoadHive
               </span>
-            </Link>
-          </div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-4">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-smooth ${
-                    isActive(item.href)
-                      ? "text-primary border-b-2 border-primary"
-                      : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
             </div>
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline" size="sm">
-              <Globe className="h-4 w-4 mr-1" />
-              Sign In
-            </Button>
-            <Button variant="hero" size="sm">
-              Get Started
-            </Button>
+            {user ? (
+              <>
+                <Button 
+                  variant="ghost" 
+                  className="text-foreground hover:text-primary"
+                  onClick={() => window.location.href = '/dashboard'}
+                >
+                  Dashboard
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  className="text-foreground hover:text-primary"
+                  onClick={() => window.location.href = '/tracking'}
+                >
+                  Tracking
+                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="text-foreground hover:text-primary">
+                      <User className="h-4 w-4 mr-2" />
+                      {profile?.full_name || 'User'}
+                      {profile?.role && (
+                        <Badge variant="secondary" className="ml-2 text-xs">
+                          {profile.role}
+                        </Badge>
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => window.location.href = '/dashboard'}>
+                      Dashboard
+                    </DropdownMenuItem>
+                    {profile?.role === 'admin' && (
+                      <DropdownMenuItem onClick={() => window.location.href = '/admin'}>
+                        Admin Panel
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={signOut}>
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" className="text-foreground hover:text-primary">
+                  Find Trucks
+                </Button>
+                <Button variant="ghost" className="text-foreground hover:text-primary">
+                  Post Load
+                </Button>
+                <Button variant="ghost" className="text-foreground hover:text-primary">
+                  Tracking
+                </Button>
+                <Button 
+                  variant="default"
+                  onClick={() => window.location.href = '/auth'}
+                >
+                  Get Started
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -68,43 +105,72 @@ const Navbar = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
           </div>
         </div>
       </div>
 
       {/* Mobile Navigation */}
-      {isOpen && (
-        <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-background/95 backdrop-blur-sm border-t border-border">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className={`block px-3 py-2 rounded-md text-base font-medium transition-smooth ${
-                  isActive(item.href)
-                    ? "text-primary bg-primary/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                {item.name}
-              </Link>
-            ))}
-            <div className="pt-4 pb-3 border-t border-border">
-              <div className="flex flex-col space-y-2">
-                <Button variant="outline" size="sm">
-                  <Globe className="h-4 w-4 mr-1" />
-                  Sign In
+      {isMenuOpen && (
+        <div className="md:hidden border-t border-border bg-background/95 backdrop-blur-sm">
+          <div className="px-2 pt-2 pb-3 space-y-1">
+            {user ? (
+              <>
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start"
+                  onClick={() => window.location.href = '/dashboard'}
+                >
+                  Dashboard
                 </Button>
-                <Button variant="hero" size="sm">
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start"
+                  onClick={() => window.location.href = '/tracking'}
+                >
+                  Tracking
+                </Button>
+                {profile?.role === 'admin' && (
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start"
+                    onClick={() => window.location.href = '/admin'}
+                  >
+                    Admin Panel
+                  </Button>
+                )}
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start text-destructive"
+                  onClick={signOut}
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" className="w-full justify-start">
+                  Find Trucks
+                </Button>
+                <Button variant="ghost" className="w-full justify-start">
+                  Post Load
+                </Button>
+                <Button variant="ghost" className="w-full justify-start">
+                  Tracking
+                </Button>
+                <Button 
+                  variant="default" 
+                  className="w-full mt-4"
+                  onClick={() => window.location.href = '/auth'}
+                >
                   Get Started
                 </Button>
-              </div>
-            </div>
+              </>
+            )}
           </div>
         </div>
       )}

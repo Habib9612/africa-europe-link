@@ -140,12 +140,22 @@ const Index = () => {
             to optimize their Europe-Africa transportation operations.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="accent" size="lg" className="text-lg">
+            <Button 
+              variant="accent" 
+              size="lg" 
+              className="text-lg"
+              onClick={() => window.location.href = '/auth'}
+            >
               <Package className="mr-2 h-5 w-5" />
               I Need to Ship
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button variant="outline" size="lg" className="text-lg bg-white/10 backdrop-blur-sm text-white border-white/30 hover:bg-white/20">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="text-lg bg-white/10 backdrop-blur-sm text-white border-white/30 hover:bg-white/20"
+              onClick={() => window.location.href = '/auth'}
+            >
               <Truck className="mr-2 h-5 w-5" />
               I Have Trucks
             </Button>
