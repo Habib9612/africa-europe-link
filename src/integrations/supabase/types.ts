@@ -14,7 +14,191 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      companies: {
+        Row: {
+          address: string | null
+          created_at: string
+          dot_number: string | null
+          email: string | null
+          id: string
+          mc_number: string | null
+          name: string
+          owner_id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          dot_number?: string | null
+          email?: string | null
+          id?: string
+          mc_number?: string | null
+          name: string
+          owner_id: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          dot_number?: string | null
+          email?: string | null
+          id?: string
+          mc_number?: string | null
+          name?: string
+          owner_id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          company_id: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          company_id?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          role?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          company_id?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          role?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      shipments: {
+        Row: {
+          carrier_id: string | null
+          commodity: string
+          created_at: string
+          delivery_date: string
+          destination_city: string
+          destination_state: string
+          equipment_type: string
+          id: string
+          origin_city: string
+          origin_state: string
+          pickup_date: string
+          rate: number
+          shipper_id: string
+          special_requirements: string | null
+          status: string
+          updated_at: string
+          weight: number
+        }
+        Insert: {
+          carrier_id?: string | null
+          commodity: string
+          created_at?: string
+          delivery_date: string
+          destination_city: string
+          destination_state: string
+          equipment_type?: string
+          id?: string
+          origin_city: string
+          origin_state: string
+          pickup_date: string
+          rate: number
+          shipper_id: string
+          special_requirements?: string | null
+          status?: string
+          updated_at?: string
+          weight: number
+        }
+        Update: {
+          carrier_id?: string | null
+          commodity?: string
+          created_at?: string
+          delivery_date?: string
+          destination_city?: string
+          destination_state?: string
+          equipment_type?: string
+          id?: string
+          origin_city?: string
+          origin_state?: string
+          pickup_date?: string
+          rate?: number
+          shipper_id?: string
+          special_requirements?: string | null
+          status?: string
+          updated_at?: string
+          weight?: number
+        }
+        Relationships: []
+      }
+      vehicles: {
+        Row: {
+          company_id: string | null
+          created_at: string
+          equipment_type: string
+          id: string
+          license_plate: string | null
+          make: string
+          model: string
+          owner_id: string
+          status: string
+          updated_at: string
+          vin: string | null
+          year: number
+        }
+        Insert: {
+          company_id?: string | null
+          created_at?: string
+          equipment_type?: string
+          id?: string
+          license_plate?: string | null
+          make: string
+          model: string
+          owner_id: string
+          status?: string
+          updated_at?: string
+          vin?: string | null
+          year: number
+        }
+        Update: {
+          company_id?: string | null
+          created_at?: string
+          equipment_type?: string
+          id?: string
+          license_plate?: string | null
+          make?: string
+          model?: string
+          owner_id?: string
+          status?: string
+          updated_at?: string
+          vin?: string | null
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicles_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
