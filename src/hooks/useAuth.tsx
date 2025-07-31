@@ -69,15 +69,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchUserProfile = async (userId: string) => {
     try {
-      // Mock profile data for now since DB schema may not be applied yet
-      setProfile({
-        id: userId,
-        user_id: userId,
-        full_name: 'Demo User',
-        role: 'individual',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      });
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+
+      if (error) {
+        console.error('Error fetching profile:', error);
+        return;
+      }
+
+      if (profile) {
+        setProfile(profile as Profile);
+      }
     } catch (error) {
       console.error('Error fetching profile:', error);
     }
