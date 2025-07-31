@@ -148,6 +148,23 @@ All colors MUST be HSL.
 }
 
 @layer components {
+  /* Shadow Utilities */
+  .shadow-elegant {
+    box-shadow: 0 20px 40px -12px hsl(260 100% 65% / 0.25);
+  }
+  
+  .shadow-glow {
+    box-shadow: 0 0 60px hsl(260 100% 65% / 0.3);
+  }
+  
+  .shadow-float {
+    box-shadow: 0 12px 48px -8px hsl(260 100% 65% / 0.2);
+  }
+  
+  .shadow-deep {
+    box-shadow: 0 25px 50px -12px hsl(260 20% 20% / 0.25);
+  }
+
   /* Premium Button Variants */
   .btn-primary-glow {
     @apply bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-4 rounded-2xl font-semibold shadow-elegant hover:shadow-glow transform hover:scale-105 transition-all duration-300;
