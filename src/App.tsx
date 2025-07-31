@@ -18,6 +18,11 @@ import NotFound from "./pages/NotFound";
 import Messages from "./pages/Messages";
 import Settings from "./pages/Settings";
 import Analytics from "./pages/Analytics";
+import AdminFleet from "./pages/AdminFleet";
+import AdminCompanies from "./pages/AdminCompanies";
+import AdminMonitor from "./pages/AdminMonitor";
+import AdminSecurity from "./pages/AdminSecurity";
+import AdminUsers from "./pages/AdminUsers";
 import AIAssistant from "./components/AIAssistant";
 
 const queryClient = new QueryClient();
@@ -158,6 +163,48 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <div className="p-6">Carriers - Coming Soon</div>
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* Admin specific routes */}
+            <Route 
+              path="/admin/fleet" 
+              element={
+                <ProtectedRoute requiredRole="admin">
+                  <AdminFleet />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin/users" 
+              element={
+                <ProtectedRoute requiredRole="admin">
+                  <AdminUsers />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin/companies" 
+              element={
+                <ProtectedRoute requiredRole="admin">
+                  <AdminCompanies />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin/monitor" 
+              element={
+                <ProtectedRoute requiredRole="admin">
+                  <AdminMonitor />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin/security" 
+              element={
+                <ProtectedRoute requiredRole="admin">
+                  <AdminSecurity />
                 </ProtectedRoute>
               } 
             />
