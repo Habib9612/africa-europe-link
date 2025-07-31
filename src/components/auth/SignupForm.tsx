@@ -53,6 +53,35 @@ export function SignupForm({ onToggleMode }: SignupFormProps) {
     setRole('individual');
   };
 
+  const createDemoAccounts = async () => {
+    setLoading(true);
+    setError('');
+    setSuccess('');
+
+    const demoAccounts = [
+      { email: 'carrier@demo.com', password: 'demo123', fullName: 'Demo Carrier', role: 'carrier' as const },
+      { email: 'shipper@demo.com', password: 'demo123', fullName: 'Demo Shipper', role: 'shipper' as const },
+      { email: 'test@demo.com', password: 'password123', fullName: 'Test User', role: 'individual' as const }
+    ];
+
+    let created = 0;
+    for (const account of demoAccounts) {
+      const { error } = await signUp(account.email, account.password, {
+        full_name: account.fullName,
+        role: account.role,
+      });
+      if (!error) created++;
+    }
+
+    if (created > 0) {
+      setSuccess(`Created ${created} demo accounts! You can now use the login demo buttons.`);
+    } else {
+      setError('Demo accounts may already exist. Try logging in with the demo buttons.');
+    }
+    
+    setLoading(false);
+  };
+
   return (
     <Card className="w-full max-w-md shadow-card">
       <CardHeader className="text-center">
@@ -167,16 +196,29 @@ export function SignupForm({ onToggleMode }: SignupFormProps) {
 
         <div className="space-y-3">
           <div className="text-center text-sm text-muted-foreground">
-            Quick test account:
+            Quick setup:
           </div>
-          <Button
-            variant="outline"
-            onClick={handleQuickSignup}
-            className="w-full"
-            type="button"
-          >
-            Fill Test Credentials
-          </Button>
+          <div className="grid grid-cols-1 gap-2">
+            <Button
+              variant="outline"
+              onClick={handleQuickSignup}
+              className="w-full"
+              type="button"
+              disabled={loading}
+            >
+              Fill Test Credentials
+            </Button>
+            <Button
+              variant="outline"
+              onClick={createDemoAccounts}
+              className="w-full"
+              type="button"
+              disabled={loading}
+            >
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Create All Demo Accounts
+            </Button>
+          </div>
         </div>
 
         <div className="text-center">

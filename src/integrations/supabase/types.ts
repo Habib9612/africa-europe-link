@@ -204,7 +204,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      setup_demo_profile: {
+        Args: { user_email: string; user_role: string; display_name: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
