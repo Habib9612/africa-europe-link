@@ -17,17 +17,17 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 215 100% 50%;
+    --primary: 260 100% 65%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 215 100% 60%;
+    --primary-glow: 280 100% 75%;
 
-    --secondary: 215 25% 95%;
-    --secondary-foreground: 215 100% 10%;
+    --secondary: 330 100% 95%;
+    --secondary-foreground: 260 100% 15%;
 
-    --muted: 215 25% 96%;
-    --muted-foreground: 215 10% 40%;
+    --muted: 240 10% 96%;
+    --muted-foreground: 240 5% 45%;
 
-    --accent: 210 100% 50%;
+    --accent: 195 100% 60%;
     --accent-foreground: 0 0% 100%;
 
     --success: 142 69% 58%;
@@ -43,17 +43,21 @@ All colors MUST be HSL.
     --input: 214.3 31.8% 91.4%;
     --ring: 203 89% 53%;
 
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(215 100% 50%), hsl(210 100% 60%));
-    --gradient-hero: linear-gradient(135deg, hsl(215 100% 25%) 0%, hsl(215 100% 35%) 100%);
-    --gradient-dark: linear-gradient(135deg, hsl(215 100% 8%) 0%, hsl(215 100% 18%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(210 100% 50%) 0%, hsl(200 100% 60%) 100%);
-    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(215 25% 98%) 100%);
+    /* Premium Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(260 100% 65%), hsl(280 100% 75%));
+    --gradient-hero: linear-gradient(135deg, hsl(260 100% 20%) 0%, hsl(280 100% 30%) 50%, hsl(195 100% 40%) 100%);
+    --gradient-dark: linear-gradient(135deg, hsl(260 100% 8%) 0%, hsl(280 100% 15%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(195 100% 60%) 0%, hsl(210 100% 70%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(260 20% 98%) 100%);
+    --gradient-vibrant: linear-gradient(135deg, hsl(330 100% 60%) 0%, hsl(260 100% 65%) 50%, hsl(195 100% 60%) 100%);
+    --gradient-glow: linear-gradient(135deg, hsl(260 100% 65% / 0.1) 0%, hsl(195 100% 60% / 0.1) 100%);
     
-    /* Shadows */
-    --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.3);
-    --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.4);
-    --shadow-card: 0 4px 20px -2px hsl(var(--foreground) / 0.1);
+    /* Premium Shadows */
+    --shadow-elegant: 0 20px 40px -12px hsl(260 100% 65% / 0.25);
+    --shadow-glow: 0 0 60px hsl(260 100% 65% / 0.3);
+    --shadow-card: 0 8px 32px -4px hsl(260 20% 20% / 0.12);
+    --shadow-float: 0 12px 48px -8px hsl(260 100% 65% / 0.2);
+    --shadow-deep: 0 25px 50px -12px hsl(260 20% 20% / 0.25);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -140,5 +144,112 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  /* Premium Button Variants */
+  .btn-primary-glow {
+    @apply bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-4 rounded-2xl font-semibold shadow-elegant hover:shadow-glow transform hover:scale-105 transition-all duration-300;
+  }
+  
+  .btn-accent-glow {
+    @apply bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-8 py-4 rounded-2xl font-semibold shadow-float hover:shadow-deep transform hover:scale-105 transition-all duration-300;
+  }
+
+  .btn-outline-glow {
+    @apply border-2 border-purple-500 text-purple-500 px-8 py-4 rounded-2xl font-semibold bg-white/5 backdrop-blur-sm hover:bg-purple-500 hover:text-white hover:shadow-glow transition-all duration-300;
+  }
+
+  /* Premium Card Styles */
+  .card-premium {
+    @apply bg-white rounded-3xl shadow-card hover:shadow-float transform hover:scale-[1.02] transition-all duration-500 border border-gray-100/50 backdrop-blur-sm;
+  }
+
+  .card-glow {
+    @apply bg-gradient-to-br from-white to-purple-50/30 rounded-3xl shadow-elegant hover:shadow-glow transform hover:scale-[1.02] transition-all duration-500 border border-purple-200/30;
+  }
+
+  .card-floating {
+    @apply relative bg-white rounded-3xl shadow-float hover:shadow-deep transform hover:-translate-y-2 transition-all duration-500;
+  }
+
+  /* Gradient Text */
+  .text-gradient-primary {
+    @apply bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent;
+  }
+
+  .text-gradient-accent {
+    @apply bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent;
+  }
+
+  .text-gradient-vibrant {
+    @apply bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent;
+  }
+
+  /* Premium Backgrounds */
+  .bg-hero-premium {
+    background: var(--gradient-hero);
+    position: relative;
+  }
+
+  .bg-hero-premium::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 50%, hsl(260 100% 65% / 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, hsl(195 100% 60% / 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, hsl(330 100% 60% / 0.2) 0%, transparent 50%);
+  }
+
+  /* Animated Elements */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.8s ease-out forwards;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { 
+      box-shadow: 0 0 20px hsl(260 100% 65% / 0.3);
+    }
+    50% { 
+      box-shadow: 0 0 40px hsl(260 100% 65% / 0.6);
+    }
+  }
+
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Interactive Hover Effects */
+  .hover-lift {
+    @apply transform transition-all duration-300 hover:scale-105 hover:shadow-float;
+  }
+
+  .hover-glow {
+    @apply transition-all duration-300 hover:shadow-glow;
+  }
+
+  .icon-bounce {
+    @apply transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12;
   }
 }
