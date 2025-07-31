@@ -15,7 +15,7 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const { signIn } = useAuth();
+  const { signIn, signUp } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,6 +36,7 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
 
   const handleDemoLogin = async (role: 'admin' | 'carrier' | 'shipper') => {
     setLoading(true);
+    setError('');
     
     const demoCredentials = {
       admin: { email: 'admin@loadhive.com', password: 'admin123' },
@@ -47,10 +48,36 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
     setEmail(demoEmail);
     setPassword(demoPassword);
     
-    const { error } = await signIn(demoEmail, demoPassword);
+    // First try to sign in
+    let { error } = await signIn(demoEmail, demoPassword);
     
-    if (!error) {
+    // If login fails and it's not the admin account, try to create the account first
+    if (error && role !== 'admin') {
+      console.log(`Creating demo ${role} account...`);
+      
+      // Create the account
+      const { error: signUpError } = await signUp(demoEmail, demoPassword, {
+        full_name: role === 'carrier' ? 'Demo Carrier' : 'Demo Shipper',
+        role: role,
+      });
+      
+      if (!signUpError) {
+        // Account created, now try to login again
+        const { error: secondLoginError } = await signIn(demoEmail, demoPassword);
+        if (!secondLoginError) {
+          window.location.href = '/dashboard';
+        } else {
+          setError('Account created but login failed. Please try again.');
+        }
+      } else {
+        setError(`Failed to create ${role} account: ${signUpError.message}`);
+      }
+    } else if (!error) {
+      // Login successful
       window.location.href = role === 'admin' ? '/admin' : '/dashboard';
+    } else {
+      // Login failed for admin or other error
+      setError(`Login failed: ${error.message}`);
     }
     
     setLoading(false);
