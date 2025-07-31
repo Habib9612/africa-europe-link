@@ -1,6 +1,5 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import AIMatching from "@/components/AIMatching";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,11 +17,13 @@ import {
   Zap,
   Database,
   Lock,
-  Smartphone
+  Smartphone,
+  Target,
+  TrendingUp,
+  Award,
+  MapPin,
+  Play
 } from "lucide-react";
-import shippingPort from "@/assets/shipping-port.jpg";
-import warehouseTech from "@/assets/warehouse-tech.jpg";
-import digitalLogistics from "@/assets/digital-logistics.jpg";
 
 const Index = () => {
   const solutions = [
@@ -30,19 +31,37 @@ const Index = () => {
       icon: Zap,
       title: "AI-Powered Freight Matching",
       description: "Our sophisticated algorithm connects you with the perfect carriers based on location, vehicle type, and delivery requirements. Reduce waiting time and find the ideal match instantly.",
-      image: digitalLogistics
+      features: ["Smart carrier selection", "Real-time availability", "Price optimization"]
     },
     {
       icon: BarChart3,
       title: "Predictive Route Optimization",
       description: "Our AI analyzes traffic patterns, weather conditions, and historical data to create optimal routes that reduce fuel consumption and delivery times by up to 30%.",
-      image: warehouseTech
+      features: ["Traffic analysis", "Weather integration", "Historical optimization"]
     },
     {
-      icon: Lock,
-      title: "Secure Data Management",
-      description: "Our platform ensures all your fleet and shipment data is protected with bank-grade security protocols and compliance with international data protection standards.",
-      image: shippingPort
+      icon: Clock,
+      title: "Real-time Fleet Monitoring",
+      description: "Track your fleet in real-time with our advanced GPS tracking system. Monitor vehicle performance, driver behavior, and delivery status with precision.",
+      features: ["Live GPS tracking", "Driver monitoring", "Performance analytics"]
+    },
+    {
+      icon: Database,
+      title: "Predictive Analytics",
+      description: "Make data-driven decisions with our predictive maintenance alerts, demand forecasting, and performance trends analysis.",
+      features: ["Maintenance alerts", "Demand forecasting", "Trend analysis"]
+    },
+    {
+      icon: Shield,
+      title: "Predictive Maintenance",
+      description: "AI predicts when your vehicles need maintenance before breakdowns occur, reducing downtime and extending fleet lifespan by detecting issues early.",
+      features: ["Early detection", "Downtime reduction", "Cost savings"]
+    },
+    {
+      icon: TrendingUp,
+      title: "Fuel Efficiency Optimization",
+      description: "Reduce fuel costs by up to 30% with our AI-powered solutions that optimize routes, monitor driving behavior, and track fuel consumption.",
+      features: ["Route optimization", "Behavior monitoring", "Consumption tracking"]
     }
   ];
 
@@ -50,22 +69,26 @@ const Index = () => {
     {
       icon: Shield,
       title: "Verified Carriers",
-      description: "All carriers are thoroughly vetted with insurance verification and performance tracking"
+      description: "All carriers are thoroughly vetted with insurance verification and performance tracking",
+      stats: "100% Verified"
     },
     {
       icon: Clock,
       title: "Real-time Tracking",
-      description: "Track your shipments in real-time across Europe and Africa with live updates"
+      description: "Track your shipments in real-time across Europe and Africa with live updates",
+      stats: "24/7 Monitoring"
     },
     {
       icon: Users,
       title: "Multi-language Support",
-      description: "Platform available in Arabic, French, English, and Spanish for seamless communication"
+      description: "Platform available in Arabic, French, English, and Spanish for seamless communication",
+      stats: "4 Languages"
     },
     {
       icon: Globe,
       title: "Cross-border Expertise",
-      description: "Specialized in Morocco-Europe logistics with customs and documentation support"
+      description: "Specialized in Morocco-Europe logistics with customs and documentation support",
+      stats: "25+ Countries"
     }
   ];
 
@@ -74,21 +97,25 @@ const Index = () => {
       number: "1",
       title: "Create Your Shipment Request",
       description: "Enter origin, destination, cargo details, and special requirements through our intuitive interface. Set your timeframe and budget preferences.",
+      highlight: "Smart Forms"
     },
     {
       number: "2",
       title: "Get Matched with Verified Carriers",
       description: "Our AI algorithm instantly finds and suggests the best carriers based on your requirements, location, and performance history.",
+      highlight: "AI Powered"
     },
     {
       number: "3",
       title: "Track Your Shipment in Real-Time",
       description: "Monitor your cargo's journey from pickup to delivery with GPS precision. Receive automated updates at every milestone.",
+      highlight: "Live Tracking"
     },
     {
       number: "4",
       title: "Confirm Delivery and Release Payment",
       description: "Verify successful delivery through our app and release payment from escrow to the carrier with one click.",
+      highlight: "Secure Payment"
     }
   ];
 
@@ -96,14 +123,26 @@ const Index = () => {
     {
       name: "Ahmed Benali",
       company: "MoroccanExport Ltd",
+      role: "Operations Director",
       rating: 5,
-      text: "LogiConnect transformed our shipping operations. We've reduced costs by 30% and improved delivery times significantly."
+      text: "LogiConnect transformed our shipping operations. We've reduced costs by 30% and improved delivery times significantly. The AI matching is incredible.",
+      avatar: "AB"
     },
     {
       name: "Maria Rodriguez",
       company: "EuroDistribution SA", 
+      role: "Supply Chain Manager",
       rating: 5,
-      text: "The AI matching is incredible. We always find the right carrier for our Europe-Africa routes within minutes."
+      text: "The AI matching is incredible. We always find the right carrier for our Europe-Africa routes within minutes. Game changer for our business.",
+      avatar: "MR"
+    },
+    {
+      name: "Youssef Alami",
+      company: "Atlas Logistics",
+      role: "Fleet Manager", 
+      rating: 5,
+      text: "Real-time tracking and predictive maintenance have revolutionized our fleet management. Downtime reduced by 40% since implementing LogiConnect.",
+      avatar: "YA"
     }
   ];
 
@@ -112,226 +151,181 @@ const Index = () => {
       <Navbar />
       <Hero />
       
-      {/* AI Solutions Section - Dark Blue Background like MarocTransit */}
-      <section className="py-24 bg-gradient-dark text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-6">
+      {/* AI Solutions Section - Professional Dark Blue */}
+      <section className="py-24 bg-gradient-dark text-white relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 bg-blue-950/20"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <Badge className="bg-white/10 backdrop-blur-sm border-white/20 text-white mb-6 px-4 py-2">
+              <Award className="h-4 w-4 mr-2" />
+              Industry Leading Technology
+            </Badge>
+            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
               AI-Powered Logistics Solutions
             </h2>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto">
-              Transform your fleet management with advanced technology
+            <p className="text-xl text-white/80 max-w-3xl mx-auto leading-relaxed">
+              Transform your fleet management with advanced technology designed 
+              specifically for the logistics industry
             </p>
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8">
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all duration-300">
-              <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mb-6">
-                <Zap className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold mb-4">AI-Powered Matching</h3>
-              <p className="text-white/80 mb-6 leading-relaxed">
-                Our advanced algorithm connects shippers with the perfect carriers based on location, 
-                vehicle type, and delivery requirements. Reduce waiting time and find the ideal match instantly.
-              </p>
-              <Button variant="ghost" className="text-blue-300 p-0 h-auto font-semibold">
-                Learn more <ArrowRight className="ml-1 h-4 w-4" />
-              </Button>
-            </div>
+            {solutions.map((solution, index) => (
+              <div key={index} className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 hover:bg-white/10 transition-all duration-500 hover:scale-105">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <solution.icon className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold mb-4 text-white">{solution.title}</h3>
+                <p className="text-white/80 mb-6 leading-relaxed">
+                  {solution.description}
+                </p>
+                
+                <div className="space-y-3 mb-6">
+                  {solution.features.map((feature, idx) => (
+                    <div key={idx} className="flex items-center text-white/90">
+                      <CheckCircle className="h-4 w-4 text-green-400 mr-3 flex-shrink-0" />
+                      <span className="text-sm">{feature}</span>
+                    </div>
+                  ))}
+                </div>
 
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all duration-300">
-              <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mb-6">
-                <BarChart3 className="h-8 w-8 text-white" />
+                <Button variant="ghost" className="text-blue-300 hover:text-white p-0 h-auto font-semibold group">
+                  Learn more 
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
               </div>
-              <h3 className="text-xl font-semibold mb-4">Route Optimization</h3>
-              <p className="text-white/80 mb-6 leading-relaxed">
-                AI-optimized routes reduce fuel consumption and delivery times by analyzing traffic, 
-                weather, and historical data.
-              </p>
-              <Button variant="ghost" className="text-blue-300 p-0 h-auto font-semibold">
-                Learn more <ArrowRight className="ml-1 h-4 w-4" />
-              </Button>
-            </div>
-
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all duration-300">
-              <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mb-6">
-                <Clock className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold mb-4">Real-time Monitoring</h3>
-              <p className="text-white/80 mb-6 leading-relaxed">
-                Track your fleet in real-time with our advanced GPS tracking system. Monitor vehicle 
-                performance, driver behavior, and delivery status.
-              </p>
-              <Button variant="ghost" className="text-blue-300 p-0 h-auto font-semibold">
-                Learn more <ArrowRight className="ml-1 h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-
-          {/* Second Row */}
-          <div className="grid lg:grid-cols-3 gap-8 mt-8">
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all duration-300">
-              <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mb-6">
-                <Database className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold mb-4">Predictive Analytics</h3>
-              <p className="text-white/80 mb-6 leading-relaxed">
-                Make data-driven decisions with our predictive maintenance alerts, demand forecasting, 
-                and performance trends analysis.
-              </p>
-              <Button variant="ghost" className="text-blue-300 p-0 h-auto font-semibold">
-                Learn more <ArrowRight className="ml-1 h-4 w-4" />
-              </Button>
-            </div>
-
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all duration-300">
-              <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mb-6">
-                <Shield className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold mb-4">Predictive Maintenance</h3>
-              <p className="text-white/80 mb-6 leading-relaxed">
-                AI predicts when your vehicles need maintenance before breakdowns occur, 
-                reducing downtime and extending fleet lifespan.
-              </p>
-              <Button variant="ghost" className="text-blue-300 p-0 h-auto font-semibold">
-                Learn more <ArrowRight className="ml-1 h-4 w-4" />
-              </Button>
-            </div>
-
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all duration-300">
-              <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mb-6">
-                <Zap className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold mb-4">Fuel Optimization</h3>
-              <p className="text-white/80 mb-6 leading-relaxed">
-                Reduce fuel costs by up to 30% with our AI-powered solutions that optimize routes, 
-                monitor driving behavior, and track fuel consumption.
-              </p>
-              <Button variant="ghost" className="text-blue-300 p-0 h-auto font-semibold">
-                Learn more <ArrowRight className="ml-1 h-4 w-4" />
-              </Button>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* How It Works Section - Like MarocTransit */}
+      {/* Why Choose Us Section */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+              Why Choose LogiConnect AI?
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Our AI-powered platform offers innovative solutions to transform your logistics operations
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-8">
+            {[
+              {
+                icon: Target,
+                title: "AI-Powered Freight Matching",
+                description: "Our sophisticated algorithm connects you with the perfect carriers based on location, vehicle type, and delivery requirements. Reduce waiting time and find the ideal match instantly.",
+                image: "🎯"
+              },
+              {
+                icon: BarChart3,
+                title: "Predictive Route Optimization", 
+                description: "Our AI analyzes traffic patterns, weather conditions, and historical data to create optimal routes that reduce fuel consumption and delivery times by up to 30%.",
+                image: "📊"
+              },
+              {
+                icon: Shield,
+                title: "Predictive Maintenance",
+                description: "Our AI predicts when your vehicles need maintenance before breakdowns occur, reducing downtime and extending fleet lifespan by detecting issues early.",
+                image: "🛡️"
+              },
+              {
+                icon: Zap,
+                title: "Fuel Efficiency Optimization",
+                description: "AI-driven insights help reduce fuel costs by 24% through optimized routes, driving behavior monitoring, and intelligent scheduling.",
+                image: "⚡"
+              },
+              {
+                icon: Database,
+                title: "Fleet Utilization Analytics",
+                description: "Maximize your fleet's productivity with AI analytics that identify underutilized vehicles and optimize capacity planning.",
+                image: "📈"
+              },
+              {
+                icon: Lock,
+                title: "Secure Data Management",
+                description: "Our platform ensures all your fleet and shipment data is protected with bank-grade security protocols and compliance standards.",
+                image: "🔒"
+              }
+            ].map((item, index) => (
+              <div key={index} className="group bg-gray-50 rounded-3xl p-8 hover:bg-blue-50 transition-all duration-300 border border-gray-100">
+                <div className="text-4xl mb-6">{item.image}</div>
+                <h3 className="text-xl font-bold text-gray-900 mb-4">{item.title}</h3>
+                <p className="text-gray-600 mb-6 leading-relaxed">{item.description}</p>
+                <Button variant="ghost" className="text-blue-600 p-0 h-auto font-semibold group">
+                  Learn more <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="py-24 bg-gradient-to-br from-gray-50 to-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
               How LogiConnect Works
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               A simple process designed for efficiency and transparency
             </p>
           </div>
 
           {/* Tab Navigation */}
-          <div className="flex justify-center mb-12">
-            <div className="bg-gray-100 rounded-lg p-1 inline-flex">
-              <button className="px-6 py-3 rounded-md bg-slate-800 text-white font-medium">
+          <div className="flex justify-center mb-16">
+            <div className="bg-white rounded-2xl p-2 shadow-lg border border-gray-200">
+              <button className="px-8 py-4 rounded-xl bg-blue-500 text-white font-semibold text-lg">
                 For Shippers
               </button>
-              <button className="px-6 py-3 rounded-md text-gray-600 font-medium hover:bg-gray-200">
+              <button className="px-8 py-4 rounded-xl text-gray-600 font-semibold text-lg hover:bg-gray-100">
                 For Carriers
               </button>
             </div>
           </div>
 
-          {/* Steps Grid */}
+          {/* Steps */}
           <div className="grid lg:grid-cols-2 gap-12">
-            {/* Step 1 */}
-            <div className="flex gap-6">
-              <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center text-xl font-bold">
-                  1
+            {steps.map((step, index) => (
+              <div key={index} className="flex gap-6 group">
+                <div className="flex-shrink-0 relative">
+                  <div className="w-16 h-16 bg-blue-500 text-white rounded-2xl flex items-center justify-center text-2xl font-bold shadow-xl">
+                    {step.number}
+                  </div>
+                  <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                    {step.highlight}
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">{step.title}</h3>
+                  <p className="text-gray-600 mb-6 leading-relaxed text-lg">{step.description}</p>
+                  <Button variant="ghost" className="text-blue-600 p-0 h-auto font-semibold group">
+                    {step.number === "4" ? "Complete" : "Next Step"} 
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
                 </div>
               </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-3 text-gray-900">Create Your Shipment Request</h3>
-                <p className="text-gray-600 mb-4 leading-relaxed">
-                  Enter origin, destination, cargo details, and special requirements through our intuitive 
-                  interface. Set your timeframe and budget preferences.
-                </p>
-                <button className="text-blue-500 font-semibold flex items-center">
-                  Next Step <ArrowRight className="ml-1 h-4 w-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Step 2 */}
-            <div className="flex gap-6">
-              <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center text-xl font-bold">
-                  2
-                </div>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-3 text-gray-900">Get Matched with Verified Carriers</h3>
-                <p className="text-gray-600 mb-4 leading-relaxed">
-                  Our AI algorithm instantly finds and suggests the best carriers based on your requirements, 
-                  location, and performance history.
-                </p>
-                <button className="text-blue-500 font-semibold flex items-center">
-                  Next Step <ArrowRight className="ml-1 h-4 w-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Step 3 */}
-            <div className="flex gap-6">
-              <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center text-xl font-bold">
-                  3
-                </div>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-3 text-gray-900">Track Your Shipment in Real-Time</h3>
-                <p className="text-gray-600 mb-4 leading-relaxed">
-                  Monitor your cargo's journey from pickup to delivery with GPS precision. Receive automated 
-                  updates at every milestone.
-                </p>
-                <button className="text-blue-500 font-semibold flex items-center">
-                  Next Step <ArrowRight className="ml-1 h-4 w-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Step 4 */}
-            <div className="flex gap-6">
-              <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center text-xl font-bold">
-                  4
-                </div>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-3 text-gray-900">Confirm Delivery and Release Payment</h3>
-                <p className="text-gray-600 mb-4 leading-relaxed">
-                  Verify successful delivery through our app and release payment from escrow to the carrier 
-                  with one click.
-                </p>
-                <button className="text-blue-500 font-semibold flex items-center">
-                  Complete <ArrowRight className="ml-1 h-4 w-4" />
-                </button>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
-      
+
       {/* Features Section */}
-      <section className="py-24 bg-background">
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <Badge variant="secondary" className="mb-4">
+          <div className="text-center mb-20">
+            <Badge className="bg-blue-100 text-blue-700 mb-6 px-4 py-2">
               <CheckCircle className="h-4 w-4 mr-2" />
               Trusted Platform
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
               Why Choose LogiConnect?
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Built specifically for Morocco's strategic position connecting Europe and Africa,
               with features designed for cross-continental logistics.
             </p>
@@ -339,13 +333,14 @@ const Index = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <Card key={index} className="text-center shadow-card hover:shadow-elegant transition-smooth">
+              <Card key={index} className="text-center shadow-xl hover:shadow-2xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-gray-50 group hover:scale-105">
                 <CardContent className="p-8">
-                  <div className="bg-primary/10 p-4 rounded-lg inline-block mb-6">
-                    <feature.icon className="h-8 w-8 text-primary" />
+                  <div className="bg-blue-100 p-4 rounded-2xl inline-block mb-6 group-hover:bg-blue-200 transition-colors">
+                    <feature.icon className="h-8 w-8 text-blue-600" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-4">{feature.title}</h3>
-                  <p className="text-muted-foreground">{feature.description}</p>
+                  <div className="text-3xl font-bold text-blue-600 mb-2">{feature.stats}</div>
+                  <h3 className="text-xl font-semibold mb-4 text-gray-900">{feature.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -354,32 +349,38 @@ const Index = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 bg-gradient-card">
+      <section className="py-24 bg-gradient-to-br from-blue-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
               Trusted by Leading Companies
             </h2>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl text-gray-600">
               See what our customers say about their experience
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="shadow-card">
+              <Card key={index} className="shadow-xl border-0 hover:shadow-2xl transition-all duration-300 bg-white">
                 <CardContent className="p-8">
-                  <div className="flex items-center mb-4">
+                  <div className="flex items-center mb-6">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 text-yellow-500 fill-current" />
+                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
                     ))}
                   </div>
-                  <p className="text-lg text-foreground mb-6 italic">
+                  <p className="text-lg text-gray-700 mb-8 italic leading-relaxed">
                     "{testimonial.text}"
                   </p>
-                  <div>
-                    <p className="font-semibold">{testimonial.name}</p>
-                    <p className="text-sm text-muted-foreground">{testimonial.company}</p>
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                      {testimonial.avatar}
+                    </div>
+                    <div>
+                      <p className="font-bold text-gray-900">{testimonial.name}</p>
+                      <p className="text-sm text-gray-600">{testimonial.role}</p>
+                      <p className="text-sm text-blue-600 font-medium">{testimonial.company}</p>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -389,57 +390,65 @@ const Index = () => {
       </section>
 
       {/* Mobile App Section */}
-      <section className="py-24 bg-background">
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
+              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-8">
                 Take LogiConnect With You Everywhere
               </h2>
-              <p className="text-xl text-muted-foreground mb-8">
+              <p className="text-xl text-gray-600 mb-10 leading-relaxed">
                 Manage your shipments on the go with our powerful mobile apps. 
                 Available for iOS and Android devices.
               </p>
               
-              <div className="space-y-4 mb-8">
+              <div className="space-y-6 mb-10">
                 <div className="flex items-center gap-4">
-                  <Smartphone className="h-6 w-6 text-primary" />
-                  <span>Manage shipments on the go from anywhere</span>
+                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                    <Smartphone className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <span className="text-lg font-medium text-gray-700">Manage shipments on the go from anywhere</span>
                 </div>
                 <div className="flex items-center gap-4">
-                  <Globe className="h-6 w-6 text-primary" />
-                  <span>Real-time notifications for status updates</span>
+                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                    <Globe className="h-6 w-6 text-green-600" />
+                  </div>
+                  <span className="text-lg font-medium text-gray-700">Real-time notifications for status updates</span>
                 </div>
                 <div className="flex items-center gap-4">
-                  <Package className="h-6 w-6 text-primary" />
-                  <span>Track shipments with live GPS updates</span>
+                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <Package className="h-6 w-6 text-purple-600" />
+                  </div>
+                  <span className="text-lg font-medium text-gray-700">Track shipments with live GPS updates</span>
                 </div>
                 <div className="flex items-center gap-4">
-                  <Clock className="h-6 w-6 text-primary" />
-                  <span>Quick access to all delivery information</span>
+                  <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                    <Clock className="h-6 w-6 text-orange-600" />
+                  </div>
+                  <span className="text-lg font-medium text-gray-700">Quick access to all delivery information</span>
                 </div>
               </div>
 
               <div className="flex gap-4">
-                <Button variant="outline" className="h-14 px-6">
+                <Button className="h-16 px-6 bg-black hover:bg-gray-800">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-black rounded-md flex items-center justify-center">
-                      <div className="w-5 h-5 bg-white rounded-sm"></div>
+                    <div className="w-8 h-8 bg-white rounded-md flex items-center justify-center">
+                      <div className="w-5 h-5 bg-black rounded-sm"></div>
                     </div>
                     <div className="text-left">
-                      <div className="text-xs text-muted-foreground">Download on the</div>
-                      <div className="font-semibold">App Store</div>
+                      <div className="text-xs text-gray-300">Download on the</div>
+                      <div className="font-semibold text-white">App Store</div>
                     </div>
                   </div>
                 </Button>
-                <Button variant="outline" className="h-14 px-6">
+                <Button className="h-16 px-6 bg-green-600 hover:bg-green-700">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 via-red-500 to-pink-500 rounded-md flex items-center justify-center">
-                      <div className="w-4 h-4 bg-white rounded-sm"></div>
+                    <div className="w-8 h-8 bg-white rounded-md flex items-center justify-center">
+                      <Play className="h-4 w-4 text-green-600" />
                     </div>
                     <div className="text-left">
-                      <div className="text-xs text-muted-foreground">Get it on</div>
-                      <div className="font-semibold">Google Play</div>
+                      <div className="text-xs text-green-100">Get it on</div>
+                      <div className="font-semibold text-white">Google Play</div>
                     </div>
                   </div>
                 </Button>
@@ -447,12 +456,12 @@ const Index = () => {
             </div>
             
             <div className="relative">
-              <div className="bg-gradient-card rounded-2xl p-8 text-center">
-                <div className="w-32 h-32 bg-primary/20 rounded-2xl mx-auto mb-4 flex items-center justify-center">
-                  <Smartphone className="h-16 w-16 text-primary" />
+              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-3xl p-12 text-center border border-blue-100">
+                <div className="w-32 h-32 bg-blue-500 rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-xl">
+                  <Smartphone className="h-16 w-16 text-white" />
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  Scan to download<br />
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Scan to download</h3>
+                <p className="text-gray-600">
                   Point your camera at the QR code to download our mobile app
                 </p>
               </div>
@@ -462,102 +471,106 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-hero">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
+      <section className="py-24 bg-gradient-hero relative overflow-hidden">
+        <div className="absolute inset-0 bg-blue-950/20"></div>
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-8">
             Ready to Transform Your Logistics Operations?
           </h2>
-          <p className="text-xl text-white/90 mb-8">
-            Join the digital revolution in Moroccan logistics today
+          <p className="text-xl text-white/90 mb-12 max-w-2xl mx-auto leading-relaxed">
+            Join the digital revolution in Moroccan logistics today and experience 
+            the power of AI-driven logistics management.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-8">
             <Button 
-              variant="accent" 
               size="lg" 
-              className="text-lg"
+              className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold h-16"
               onClick={() => window.location.href = '/auth'}
             >
+              <Package className="mr-3 h-5 w-5" />
               Sign Up as Shipper
+              <ArrowRight className="ml-3 h-5 w-5" />
             </Button>
             <Button 
               variant="outline" 
               size="lg" 
-              className="text-lg bg-white/10 backdrop-blur-sm text-white border-white/30 hover:bg-white/20"
+              className="border-2 border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg font-semibold h-16 backdrop-blur-sm"
               onClick={() => window.location.href = '/auth'}
             >
+              <Truck className="mr-3 h-5 w-5" />
               Sign Up as Carrier
             </Button>
           </div>
-          <Button variant="ghost" className="text-white">
+          <Button variant="ghost" className="text-white/80 hover:text-white">
             Learn more about our enterprise solutions <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-white py-16">
+      <footer className="bg-gray-900 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-5 gap-8">
+          <div className="grid lg:grid-cols-5 gap-12">
             <div className="lg:col-span-2">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                  <Truck className="h-6 w-6 text-white" />
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+                  <Truck className="h-7 w-7 text-white" />
                 </div>
-                <span className="text-xl font-bold">LogiConnect</span>
+                <span className="text-2xl font-bold">LogiConnect</span>
               </div>
-              <p className="text-gray-300 mb-6 max-w-md">
+              <p className="text-gray-300 mb-8 max-w-md leading-relaxed text-lg">
                 Revolutionizing Morocco's logistics industry with our AI-powered 
                 digital freight marketplace. Connecting shippers with carriers 
                 through cutting-edge technology.
               </p>
               <div className="flex gap-4">
-                <div className="w-8 h-8 bg-gray-700 rounded-lg"></div>
-                <div className="w-8 h-8 bg-gray-700 rounded-lg"></div>
-                <div className="w-8 h-8 bg-gray-700 rounded-lg"></div>
-                <div className="w-8 h-8 bg-gray-700 rounded-lg"></div>
+                <div className="w-10 h-10 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors cursor-pointer"></div>
+                <div className="w-10 h-10 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors cursor-pointer"></div>
+                <div className="w-10 h-10 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors cursor-pointer"></div>
+                <div className="w-10 h-10 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors cursor-pointer"></div>
               </div>
             </div>
 
             <div>
-              <h3 className="font-semibold mb-4">PLATFORM</h3>
-              <ul className="space-y-3 text-gray-300">
-                <li>Features</li>
-                <li>Pricing</li>
-                <li>Enterprise</li>
-                <li>Integrations</li>
+              <h3 className="font-bold mb-6 text-lg">PLATFORM</h3>
+              <ul className="space-y-4 text-gray-300">
+                <li className="hover:text-white cursor-pointer">Features</li>
+                <li className="hover:text-white cursor-pointer">Pricing</li>
+                <li className="hover:text-white cursor-pointer">Enterprise</li>
+                <li className="hover:text-white cursor-pointer">Integrations</li>
               </ul>
             </div>
 
             <div>
-              <h3 className="font-semibold mb-4">RESOURCES</h3>
-              <ul className="space-y-3 text-gray-300">
-                <li>Blog</li>
-                <li>Case Studies</li>
-                <li>Help Center</li>
-                <li>API Documentation</li>
+              <h3 className="font-bold mb-6 text-lg">RESOURCES</h3>
+              <ul className="space-y-4 text-gray-300">
+                <li className="hover:text-white cursor-pointer">Blog</li>
+                <li className="hover:text-white cursor-pointer">Case Studies</li>
+                <li className="hover:text-white cursor-pointer">Help Center</li>
+                <li className="hover:text-white cursor-pointer">API Documentation</li>
               </ul>
             </div>
 
             <div>
-              <h3 className="font-semibold mb-4">COMPANY</h3>
-              <ul className="space-y-3 text-gray-300">
-                <li>About Us</li>
-                <li>Careers</li>
-                <li>Press</li>
-                <li>Contact</li>
+              <h3 className="font-bold mb-6 text-lg">COMPANY</h3>
+              <ul className="space-y-4 text-gray-300">
+                <li className="hover:text-white cursor-pointer">About Us</li>
+                <li className="hover:text-white cursor-pointer">Careers</li>
+                <li className="hover:text-white cursor-pointer">Press</li>
+                <li className="hover:text-white cursor-pointer">Contact</li>
               </ul>
             </div>
           </div>
 
-          <div className="border-t border-gray-700 mt-12 pt-8">
+          <div className="border-t border-gray-700 mt-16 pt-8">
             <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
-              <p className="text-gray-400">
+              <p className="text-gray-400 text-lg">
                 © 2025 LogiConnect, Inc. All rights reserved.
               </p>
-              <div className="flex gap-6 text-gray-400">
-                <span>Terms</span>
-                <span>Privacy</span>
-                <span>Cookies</span>
+              <div className="flex gap-8 text-gray-400">
+                <span className="hover:text-white cursor-pointer">Terms</span>
+                <span className="hover:text-white cursor-pointer">Privacy</span>
+                <span className="hover:text-white cursor-pointer">Cookies</span>
               </div>
             </div>
           </div>
