@@ -10,7 +10,7 @@ const Hero = () => {
   ];
 
   return (
-    <div className="relative bg-gradient-to-br from-blue-600 to-blue-800">
+    <div className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800">
       {/* Hero Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
         <div className="grid lg:grid-cols-2 gap-16 items-center">

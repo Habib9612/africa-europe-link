@@ -94,13 +94,13 @@ const Index = () => {
 
           <div className="grid lg:grid-cols-3 gap-8">
             {solutions.map((solution, index) => (
-              <Card key={index} className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <Card key={index} className="bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-l-4 border-blue-500">
                 <CardContent className="p-8">
-                  <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
-                    <solution.icon className="h-8 w-8 text-blue-600" />
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6 shadow-lg">
+                    <solution.icon className="h-8 w-8 text-white" />
                   </div>
                   <h3 className="text-xl font-semibold mb-4 text-gray-900">{solution.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{solution.description}</p>
+                  <p className="text-gray-600 leading-relaxed mb-4">{solution.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -125,17 +125,25 @@ const Index = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <Card key={index} className="text-center shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <CardContent className="p-8">
-                  <div className="bg-blue-100 p-4 rounded-xl inline-block mb-6">
-                    <feature.icon className="h-8 w-8 text-blue-600" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-4 text-gray-900">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
-                </CardContent>
-              </Card>
-            ))}
+            {features.map((feature, index) => {
+              const colors = [
+                "bg-gradient-to-br from-blue-500 to-blue-600",
+                "bg-gradient-to-br from-emerald-500 to-emerald-600", 
+                "bg-gradient-to-br from-purple-500 to-purple-600",
+                "bg-gradient-to-br from-orange-500 to-orange-600"
+              ];
+              return (
+                <Card key={index} className="text-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                  <CardContent className="p-8">
+                    <div className={`${colors[index]} p-4 rounded-xl inline-block mb-6 shadow-lg`}>
+                      <feature.icon className="h-8 w-8 text-white" />
+                    </div>
+                    <h3 className="text-xl font-semibold mb-4 text-gray-900">{feature.title}</h3>
+                    <p className="text-gray-600">{feature.description}</p>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </section>
