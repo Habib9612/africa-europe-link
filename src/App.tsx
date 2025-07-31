@@ -85,6 +85,80 @@ const App = () => (
                 </ProtectedRoute>
               } 
             />
+            {/* Additional sidebar navigation routes */}
+            <Route 
+              path="/messages" 
+              element={
+                <ProtectedRoute>
+                  <div className="p-6">Messages - Coming Soon</div>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/settings" 
+              element={
+                <ProtectedRoute>
+                  <div className="p-6">Settings - Coming Soon</div>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/analytics" 
+              element={
+                <ProtectedRoute>
+                  <div className="p-6">Analytics - Coming Soon</div>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/fleet" 
+              element={
+                <ProtectedRoute>
+                  <div className="p-6">Fleet Management - Coming Soon</div>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/drivers" 
+              element={
+                <ProtectedRoute>
+                  <div className="p-6">Drivers - Coming Soon</div>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/routes" 
+              element={
+                <ProtectedRoute>
+                  <div className="p-6">Routes - Coming Soon</div>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/maintenance" 
+              element={
+                <ProtectedRoute>
+                  <div className="p-6">Maintenance - Coming Soon</div>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/fuel" 
+              element={
+                <ProtectedRoute>
+                  <div className="p-6">Fuel Reports - Coming Soon</div>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/carriers" 
+              element={
+                <ProtectedRoute>
+                  <div className="p-6">Carriers - Coming Soon</div>
+                </ProtectedRoute>
+              } 
+            />
+            
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
