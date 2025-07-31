@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -81,6 +81,27 @@ export function SignupForm({ onToggleMode }: SignupFormProps) {
     
     setLoading(false);
   };
+
+  // Auto-create demo accounts on component mount
+  useEffect(() => {
+    const createDemoAccountsOnLoad = async () => {
+      const demoAccounts = [
+        { email: 'carrier@demo.com', password: 'demo123', fullName: 'Demo Carrier', role: 'carrier' as const },
+        { email: 'shipper@demo.com', password: 'demo123', fullName: 'Demo Shipper', role: 'shipper' as const },
+        { email: 'test@demo.com', password: 'password123', fullName: 'Test User', role: 'individual' as const }
+      ];
+
+      for (const account of demoAccounts) {
+        await signUp(account.email, account.password, {
+          full_name: account.fullName,
+          role: account.role,
+        });
+        // Don't show errors for this auto-creation - accounts might already exist
+      }
+    };
+
+    createDemoAccountsOnLoad();
+  }, [signUp]);
 
   return (
     <Card className="w-full max-w-md shadow-card">

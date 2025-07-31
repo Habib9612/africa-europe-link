@@ -204,6 +204,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_demo_user: {
+        Args: {
+          user_email: string
+          user_password: string
+          display_name: string
+          user_role: string
+        }
+        Returns: Json
+      }
       setup_demo_profile: {
         Args: { user_email: string; user_role: string; display_name: string }
         Returns: undefined
