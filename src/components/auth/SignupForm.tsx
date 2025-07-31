@@ -17,22 +17,40 @@ export function SignupForm({ onToggleMode }: SignupFormProps) {
   const [fullName, setFullName] = useState('');
   const [role, setRole] = useState<'carrier' | 'shipper' | 'individual' | 'company'>('individual');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const { signUp } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError('');
+    setSuccess('');
 
-    const { error } = await signUp(email, password, {
+    const { error: signUpError } = await signUp(email, password, {
       full_name: fullName,
       role: role,
     });
     
-    if (!error) {
-      // Stay on auth page to show success message
+    if (signUpError) {
+      setError(signUpError.message);
+    } else {
+      setSuccess('Account created successfully! You can now sign in.');
+      // Clear form
+      setEmail('');
+      setPassword('');
+      setFullName('');
+      setRole('individual');
     }
     
     setLoading(false);
+  };
+
+  const handleQuickSignup = () => {
+    setEmail('test@demo.com');
+    setPassword('password123');
+    setFullName('Test User');
+    setRole('individual');
   };
 
   return (
@@ -129,11 +147,37 @@ export function SignupForm({ onToggleMode }: SignupFormProps) {
             </Select>
           </div>
 
+          {error && (
+            <div className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">
+              {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="text-sm text-green-600 bg-green-50 p-3 rounded-lg">
+              {success}
+            </div>
+          )}
+
           <Button type="submit" className="w-full" disabled={loading}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Create Account
           </Button>
         </form>
+
+        <div className="space-y-3">
+          <div className="text-center text-sm text-muted-foreground">
+            Quick test account:
+          </div>
+          <Button
+            variant="outline"
+            onClick={handleQuickSignup}
+            className="w-full"
+            type="button"
+          >
+            Fill Test Credentials
+          </Button>
+        </div>
 
         <div className="text-center">
           <Button variant="link" onClick={onToggleMode} className="text-primary">
