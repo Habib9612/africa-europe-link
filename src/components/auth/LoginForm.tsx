@@ -14,15 +14,19 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const { signIn } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError('');
 
-    const { error } = await signIn(email, password);
+    const { error: signInError } = await signIn(email, password);
     
-    if (!error) {
+    if (signInError) {
+      setError(signInError.message);
+    } else {
       // Redirect will be handled by auth state change
       window.location.href = '/dashboard';
     }
@@ -93,6 +97,12 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
               />
             </div>
           </div>
+          
+          {error && (
+            <div className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">
+              {error}
+            </div>
+          )}
 
           <Button type="submit" className="w-full" disabled={loading}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
