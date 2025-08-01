@@ -16,6 +16,9 @@ jwt_expiry = 3600
 enable_signup = true
 enable_confirmations = false
 
+[functions.ai-matching]
+verify_jwt = true
+
 [functions.shipments]
 verify_jwt = true
 
@@ -53,16 +56,4 @@ verify_jwt = true
 verify_jwt = true
 
 [functions.messages]
-verify_jwt = true
-
-[functions.drivers]
-verify_jwt = true
-
-[functions.customers]
-verify_jwt = true
-
-[functions.route-optimization]
-verify_jwt = true
-
-[functions.service-quotes]
 verify_jwt = true
