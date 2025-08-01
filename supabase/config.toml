@@ -33,3 +33,15 @@ verify_jwt = true
 
 [functions.admin-panel]
 verify_jwt = true
+
+[functions.drivers]
+verify_jwt = true
+
+[functions.customers]
+verify_jwt = true
+
+[functions.route-optimization]
+verify_jwt = true
+
+[functions.service-quotes]
+verify_jwt = true
