@@ -153,7 +153,11 @@ const AIMatching = () => {
                         <Clock className="h-4 w-4 mr-1" />
                         ETA: {match.eta}
                       </div>
-                      <Button variant="premium" size="sm">
+                      <Button 
+                        variant="premium" 
+                        size="sm"
+                        onClick={() => window.location.href = '/auth'}
+                      >
                         Book Now
                       </Button>
                     </div>

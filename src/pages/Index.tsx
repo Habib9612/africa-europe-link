@@ -16,7 +16,10 @@ import {
   ArrowRight,
   BarChart3,
   Zap,
-  Smartphone
+  Smartphone,
+  Brain,
+  MapPin,
+  TrendingUp
 } from "lucide-react";
 
 const Index = () => {
@@ -82,137 +85,63 @@ const Index = () => {
       <Hero />
       <AIMatching />
       
-      {/* How AI Matching Works Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 via-white to-green-50 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-green-500/5"></div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <Badge className="bg-blue-100 text-blue-700 mb-6 px-4 py-2">
-              <Zap className="h-4 w-4 mr-2" />
-              AI-Powered Technology
+      {/* Simple AI Features Section */}
+      <section className="py-16 bg-gradient-to-br from-primary/5 via-transparent to-accent/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <Badge className="bg-primary/10 text-primary mb-4 px-4 py-2">
+              <Brain className="h-4 w-4 mr-2" />
+              AI-Powered
             </Badge>
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-              How Our AI Matching Works
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+              Smart Matching Technology
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Our sophisticated AI algorithm analyzes multiple factors to find the perfect carrier-shipper matches in real-time
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Our AI instantly connects shippers with the best carriers based on location, capacity, and pricing
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8 mb-16">
-            {/* Step 1 */}
-            <Card className="bg-white/80 backdrop-blur-sm shadow-xl border-0 hover:shadow-2xl transition-all duration-300">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full mx-auto mb-6 flex items-center justify-center shadow-lg">
-                  <span className="text-2xl font-bold text-white">1</span>
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <Card className="text-center bg-white/50 backdrop-blur-sm border-0 shadow-lg">
+              <CardContent className="p-6">
+                <div className="w-12 h-12 bg-primary/10 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <MapPin className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold mb-4 text-gray-900">Location Analysis</h3>
-                <p className="text-gray-600 mb-4">
-                  Uses Haversine formula to calculate precise distances and optimize routes for maximum efficiency
-                </p>
-                <div className="bg-blue-50 rounded-lg p-4">
-                  <p className="text-sm text-blue-700 font-medium">
-                    Analyzes pickup/delivery locations and carrier positions
-                  </p>
-                </div>
+                <h3 className="font-semibold mb-2">Location Analysis</h3>
+                <p className="text-sm text-muted-foreground">Finds carriers closest to your pickup location</p>
               </CardContent>
             </Card>
 
-            {/* Step 2 */}
-            <Card className="bg-white/80 backdrop-blur-sm shadow-xl border-0 hover:shadow-2xl transition-all duration-300">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full mx-auto mb-6 flex items-center justify-center shadow-lg">
-                  <span className="text-2xl font-bold text-white">2</span>
+            <Card className="text-center bg-white/50 backdrop-blur-sm border-0 shadow-lg">
+              <CardContent className="p-6">
+                <div className="w-12 h-12 bg-primary/10 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <Package className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold mb-4 text-gray-900">Capacity Matching</h3>
-                <p className="text-gray-600 mb-4">
-                  Smart analysis of shipment weight vs carrier capacity with equipment type compatibility
-                </p>
-                <div className="bg-green-50 rounded-lg p-4">
-                  <p className="text-sm text-green-700 font-medium">
-                    +15 points for perfect equipment match
-                  </p>
-                </div>
+                <h3 className="font-semibold mb-2">Smart Matching</h3>
+                <p className="text-sm text-muted-foreground">Matches cargo type with available truck capacity</p>
               </CardContent>
             </Card>
 
-            {/* Step 3 */}
-            <Card className="bg-white/80 backdrop-blur-sm shadow-xl border-0 hover:shadow-2xl transition-all duration-300">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full mx-auto mb-6 flex items-center justify-center shadow-lg">
-                  <span className="text-2xl font-bold text-white">3</span>
+            <Card className="text-center bg-white/50 backdrop-blur-sm border-0 shadow-lg">
+              <CardContent className="p-6">
+                <div className="w-12 h-12 bg-primary/10 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <TrendingUp className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold mb-4 text-gray-900">AI Scoring</h3>
-                <p className="text-gray-600 mb-4">
-                  100-point scoring system analyzing distance, timing, capacity, and profitability
-                </p>
-                <div className="bg-purple-50 rounded-lg p-4">
-                  <p className="text-sm text-purple-700 font-medium">
-                    90-100% = Highly Recommended matches
-                  </p>
-                </div>
+                <h3 className="font-semibold mb-2">Best Pricing</h3>
+                <p className="text-sm text-muted-foreground">AI optimizes rates for competitive pricing</p>
               </CardContent>
             </Card>
           </div>
 
-          {/* AI Insights */}
-          <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-white/20">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h3 className="text-3xl font-bold text-gray-900 mb-6">Real-Time AI Insights</h3>
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-3 h-3 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Profitability Score (60-100%)</h4>
-                      <p className="text-gray-600">Based on rate vs operating costs and market demand</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div className="w-3 h-3 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Efficiency Score (0-100%)</h4>
-                      <p className="text-gray-600">Route optimization and vehicle utilization analysis</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div className="w-3 h-3 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Reliability Score (75-95%)</h4>
-                      <p className="text-gray-600">Historical performance and carrier reputation data</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 text-white">
-                <h4 className="text-lg font-semibold mb-4">Live Algorithm Output</h4>
-                <div className="space-y-3 font-mono text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Distance Score:</span>
-                    <span className="text-green-400">+25 pts</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Capacity Match:</span>
-                    <span className="text-blue-400">+20 pts</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Equipment Type:</span>
-                    <span className="text-purple-400">+15 pts</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Timing Score:</span>
-                    <span className="text-yellow-400">+18 pts</span>
-                  </div>
-                  <div className="border-t border-gray-600 pt-2 mt-3">
-                    <div className="flex justify-between font-bold">
-                      <span>Match Score:</span>
-                      <span className="text-green-400">78/100</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="text-center mt-8">
+            <Button 
+              size="lg" 
+              onClick={() => window.location.href = '/auth'}
+              className="px-8 py-3"
+            >
+              Try AI Matching
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
           </div>
         </div>
       </section>
