@@ -53,6 +53,171 @@ export type Database = {
         }
         Relationships: []
       }
+      drivers: {
+        Row: {
+          company_id: string | null
+          created_at: string
+          created_by: string | null
+          current_vehicle_id: string | null
+          email: string | null
+          id: string
+          license_expiry: string | null
+          license_number: string | null
+          phone: string | null
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          current_vehicle_id?: string | null
+          email?: string | null
+          id?: string
+          license_expiry?: string | null
+          license_number?: string | null
+          phone?: string | null
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          company_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          current_vehicle_id?: string | null
+          email?: string | null
+          id?: string
+          license_expiry?: string | null
+          license_number?: string | null
+          phone?: string | null
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drivers_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "drivers_current_vehicle_id_fkey"
+            columns: ["current_vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      load_matches: {
+        Row: {
+          ai_insights: Json | null
+          carrier_id: string
+          compatibility_factors: Json | null
+          created_at: string
+          distance_km: number | null
+          estimated_cost: number | null
+          estimated_duration_hours: number | null
+          expires_at: string | null
+          id: string
+          match_score: number
+          shipment_id: string
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          ai_insights?: Json | null
+          carrier_id: string
+          compatibility_factors?: Json | null
+          created_at?: string
+          distance_km?: number | null
+          estimated_cost?: number | null
+          estimated_duration_hours?: number | null
+          expires_at?: string | null
+          id?: string
+          match_score: number
+          shipment_id: string
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ai_insights?: Json | null
+          carrier_id?: string
+          compatibility_factors?: Json | null
+          created_at?: string
+          distance_km?: number | null
+          estimated_cost?: number | null
+          estimated_duration_hours?: number | null
+          expires_at?: string | null
+          id?: string
+          match_score?: number
+          shipment_id?: string
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      locations: {
+        Row: {
+          address: string | null
+          available_from: string | null
+          available_until: string | null
+          capacity_kg: number | null
+          city: string | null
+          country: string | null
+          created_at: string
+          equipment_types: string[] | null
+          id: string
+          is_current: boolean | null
+          latitude: number
+          longitude: number
+          state: string | null
+          updated_at: string
+          user_id: string
+          vehicle_id: string | null
+        }
+        Insert: {
+          address?: string | null
+          available_from?: string | null
+          available_until?: string | null
+          capacity_kg?: number | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          equipment_types?: string[] | null
+          id?: string
+          is_current?: boolean | null
+          latitude: number
+          longitude: number
+          state?: string | null
+          updated_at?: string
+          user_id: string
+          vehicle_id?: string | null
+        }
+        Update: {
+          address?: string | null
+          available_from?: string | null
+          available_until?: string | null
+          capacity_kg?: number | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          equipment_types?: string[] | null
+          id?: string
+          is_current?: boolean | null
+          latitude?: number
+          longitude?: number
+          state?: string | null
+          updated_at?: string
+          user_id?: string
+          vehicle_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
