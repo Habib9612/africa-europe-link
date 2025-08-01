@@ -27,6 +27,7 @@ import {
   Activity,
   Brain,
   Zap,
+  Home,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Badge } from "@/components/ui/badge";
@@ -44,6 +45,7 @@ export function AppSidebar() {
 
   const getMenuItems = () => {
     const baseItems: Array<{title: string; url: string; icon: any; highlight?: boolean}> = [
+      { title: "Home", url: "/", icon: Home },
       { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
       { title: "Messages", url: "/messages", icon: MessageSquare },
       { title: "Settings", url: "/settings", icon: Settings },
