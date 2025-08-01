@@ -45,3 +45,24 @@ verify_jwt = true
 
 [functions.service-quotes]
 verify_jwt = true
+
+[functions.proof-of-delivery]
+verify_jwt = true
+
+[functions.issues]
+verify_jwt = true
+
+[functions.messages]
+verify_jwt = true
+
+[functions.drivers]
+verify_jwt = true
+
+[functions.customers]
+verify_jwt = true
+
+[functions.route-optimization]
+verify_jwt = true
+
+[functions.service-quotes]
+verify_jwt = true
