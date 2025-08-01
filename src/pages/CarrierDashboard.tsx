@@ -1,139 +1,172 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
-  Truck, 
+  Package, 
   TrendingUp, 
   Clock, 
   DollarSign,
   MapPin,
+  Truck,
   Star,
-  Fuel,
-  Route,
-  Package,
-  CheckCircle,
   AlertCircle,
-  Calendar,
-  Phone,
-  MessageCircle
+  CheckCircle,
+  BarChart3,
+  Users,
+  Brain,
+  Zap,
+  Target,
+  ArrowRight,
+  Eye
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
+
+interface Match {
+  id: string;
+  shipment_id: string;
+  match_score: number;
+  distance_km: number;
+  estimated_cost: number;
+  estimated_duration_hours: number;
+  compatibility_factors: {
+    distance_score: number;
+    capacity_match: number;
+    equipment_match: number;
+    timing_score: number;
+  };
+  ai_insights: {
+    profitability: number;
+    efficiency: number;
+    reliability: number;
+    recommendation: string;
+  };
+  status: string;
+  shipments: {
+    origin_city: string;
+    origin_state: string;
+    destination_city: string;
+    destination_state: string;
+    commodity: string;
+    weight: number;
+    rate: number;
+    pickup_date: string;
+  };
+}
 
 const CarrierDashboard = () => {
+  const { user } = useAuth();
+  const [matches, setMatches] = useState<Match[]>([]);
+  const [loading, setLoading] = useState(false);
+
   const stats = [
     {
-      title: "Active Loads",
-      value: "8",
-      change: "+33%",
-      icon: Package,
+      title: "Available Matches",
+      value: matches.length.toString(),
+      change: "+15%",
+      icon: Target,
       color: "text-blue-600"
     },
     {
-      title: "Monthly Revenue",
-      value: "€18,650",
+      title: "Avg Match Score",
+      value: matches.length ? `${Math.round(matches.reduce((acc, m) => acc + m.match_score, 0) / matches.length)}%` : "0%",
+      change: "+8%",
+      icon: Brain,
+      color: "text-purple-600"
+    },
+    {
+      title: "Potential Revenue",
+      value: `€${matches.reduce((acc, m) => acc + m.estimated_cost, 0).toLocaleString()}`,
       change: "+22%",
       icon: DollarSign,
       color: "text-green-600"
     },
     {
-      title: "Fleet Utilization",
-      value: "87%",
-      change: "+5%",
+      title: "Active Routes",
+      value: "8",
+      change: "+3%",
       icon: Truck,
-      color: "text-purple-600"
-    },
-    {
-      title: "Average Rating",
-      value: "4.8",
-      change: "+0.2",
-      icon: Star,
       color: "text-orange-600"
     }
   ];
 
-  const availableLoads = [
-    {
-      id: "LD001",
-      cargo: "Electronics",
-      route: "Casablanca → Madrid",
-      weight: "15 tons",
-      price: "€2,800",
-      urgency: "High",
-      pickup: "Tomorrow 09:00",
-      match: 95
-    },
-    {
-      id: "LD002",
-      cargo: "Food Products",
-      route: "Agadir → Hamburg", 
-      weight: "20 tons",
-      price: "€3,400",
-      urgency: "Medium",
-      pickup: "Jan 16 14:00",
-      match: 89
-    },
-    {
-      id: "LD003",
-      cargo: "Auto Parts",
-      route: "Tangier → Barcelona",
-      weight: "8 tons",
-      price: "€1,650",
-      urgency: "Low",
-      pickup: "Jan 17 10:00",
-      match: 82
-    }
-  ];
+  useEffect(() => {
+    fetchMatches();
+  }, [user]);
 
-  const myTrucks = [
-    {
-      id: "TR001",
-      type: "Refrigerated 40ft",
-      license: "MA-123-456",
-      status: "In Transit",
-      location: "Sevilla, Spain",
-      driver: "Ahmed El Mansouri",
-      eta: "6 hours",
-      load: "SH001"
-    },
-    {
-      id: "TR002", 
-      type: "Container 20ft",
-      license: "MA-789-012",
-      status: "Available",
-      location: "Casablanca, Morocco",
-      driver: "Hassan Ouali",
-      eta: "Ready",
-      load: null
-    },
-    {
-      id: "TR003",
-      type: "Flatbed 30ft", 
-      license: "MA-345-678",
-      status: "Loading",
-      location: "Rabat, Morocco",
-      driver: "Fatima Benali",
-      eta: "2 hours",
-      load: "SH003"
-    }
-  ];
+  const fetchMatches = async () => {
+    if (!user) return;
+    
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('load_matches')
+        .select(`
+          *,
+          shipments(origin_city, origin_state, destination_city, destination_state, commodity, weight, rate, pickup_date)
+        `)
+        .eq('carrier_id', user.id)
+        .eq('status', 'pending')
+        .order('match_score', { ascending: false })
+        .limit(10);
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Available": return "success";
-      case "In Transit": return "accent";
-      case "Loading": return "warning";
-      case "Maintenance": return "destructive";
-      default: return "secondary";
+      if (error) throw error;
+      setMatches((data || []) as unknown as Match[]);
+    } catch (error) {
+      console.error('Error fetching matches:', error);
+      toast.error('Failed to fetch matches');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const getUrgencyColor = (urgency: string) => {
-    switch (urgency) {
-      case "High": return "destructive";
-      case "Medium": return "warning";
-      case "Low": return "success";
-      default: return "secondary";
+  const viewMatchDetails = async (matchId: string) => {
+    try {
+      await supabase
+        .from('load_matches')
+        .update({ status: 'viewed' })
+        .eq('id', matchId);
+      
+      // Refresh matches
+      fetchMatches();
+      toast.success('Match details viewed');
+    } catch (error) {
+      console.error('Error updating match status:', error);
+    }
+  };
+
+  const contactShipper = async (matchId: string) => {
+    try {
+      await supabase
+        .from('load_matches')
+        .update({ status: 'contacted' })
+        .eq('id', matchId);
+      
+      // Refresh matches
+      fetchMatches();
+      toast.success('Shipper contacted successfully');
+    } catch (error) {
+      console.error('Error contacting shipper:', error);
+      toast.error('Failed to contact shipper');
+    }
+  };
+
+  const getScoreColor = (score: number) => {
+    if (score >= 80) return "text-success";
+    if (score >= 60) return "text-warning";
+    return "text-destructive";
+  };
+
+  const getRecommendationVariant = (recommendation: string) => {
+    switch (recommendation) {
+      case 'Highly Recommended': return 'success';
+      case 'Good Match': return 'warning';
+      case 'Consider': return 'secondary';
+      default: return 'secondary';
     }
   };
 
@@ -149,22 +182,17 @@ const CarrierDashboard = () => {
                   Carrier Dashboard
                 </h1>
                 <p className="text-white/90">
-                  Manage your fleet and available loads
+                  Discover AI-matched loads and manage your routes
                 </p>
               </div>
-              <div className="flex space-x-3">
-                <Button variant="accent" size="lg">
-                  <Truck className="h-5 w-5 mr-2" />
-                  Add Truck
-                </Button>
-                <Button variant="outline" size="lg" className="bg-white/10 backdrop-blur-sm text-white border-white/30 hover:bg-white/20">
-                  <Route className="h-5 w-5 mr-2" />
-                  Find Loads
-                </Button>
-              </div>
+              <Button variant="accent" size="lg" onClick={fetchMatches} disabled={loading}>
+                <Zap className="h-5 w-5 mr-2" />
+                Refresh Matches
+              </Button>
             </div>
           </div>
         </div>
+
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {stats.map((stat, index) => (
@@ -188,236 +216,160 @@ const CarrierDashboard = () => {
           ))}
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Available Loads */}
-          <div className="lg:col-span-2 space-y-6">
-            <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Package className="h-5 w-5 mr-2 text-primary" />
-                  Available Loads (AI Matched)
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {availableLoads.map((load) => (
-                    <div key={load.id} className="border rounded-lg p-4 hover:bg-accent/50 transition-smooth">
-                      <div className="flex items-center justify-between mb-3">
+        {/* AI Matches */}
+        <Card className="shadow-card">
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Brain className="h-5 w-5 mr-2 text-primary" />
+                AI-Recommended Load Matches
+                <Badge variant="accent" className="ml-3 animate-pulse">
+                  <Zap className="h-3 w-3 mr-1" />
+                  Live
+                </Badge>
+              </div>
+              <Button variant="outline" onClick={fetchMatches} disabled={loading}>
+                Refresh
+              </Button>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {loading ? (
+              <div className="text-center py-12">
+                <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+                <p className="text-muted-foreground">Finding your perfect matches...</p>
+              </div>
+            ) : matches.length === 0 ? (
+              <div className="text-center py-12">
+                <Brain className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">No AI matches available</h3>
+                <p className="text-muted-foreground mb-4">
+                  Check back later for new load recommendations
+                </p>
+                <Button variant="premium" onClick={fetchMatches}>
+                  <Zap className="h-4 w-4 mr-2" />
+                  Search for Matches
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {matches.map((match) => (
+                  <Card key={match.id} className="shadow-elegant hover:shadow-glow transition-smooth border border-primary/10">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center space-x-3">
-                          <div className="bg-primary/10 p-2 rounded">
-                            <Package className="h-4 w-4 text-primary" />
+                          <div className="bg-gradient-primary p-3 rounded-xl">
+                            <Package className="h-6 w-6 text-white" />
                           </div>
                           <div>
-                            <p className="font-medium">{load.id} - {load.cargo}</p>
-                            <p className="text-sm text-muted-foreground flex items-center">
-                              <MapPin className="h-3 w-3 mr-1" />
-                              {load.route}
+                            <h3 className="font-semibold text-lg">
+                              {match.shipments.origin_city} → {match.shipments.destination_city}
+                            </h3>
+                            <p className="text-muted-foreground">
+                              {match.shipments.commodity} • {match.shipments.weight}kg
                             </p>
                           </div>
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <Badge variant="accent">
-                            {load.match}% Match
-                          </Badge>
-                          <Badge variant={getUrgencyColor(load.urgency) as any}>
-                            {load.urgency}
-                          </Badge>
+                        <Badge 
+                          variant="accent" 
+                          className={`text-lg font-bold ${getScoreColor(match.match_score)}`}
+                        >
+                          {match.match_score}% Match
+                        </Badge>
+                      </div>
+
+                      {/* Key Metrics */}
+                      <div className="grid md:grid-cols-4 gap-4 mb-6">
+                        <div className="text-center p-3 bg-gradient-card rounded-lg">
+                          <MapPin className="h-5 w-5 text-primary mx-auto mb-1" />
+                          <div className="text-lg font-bold">{match.distance_km}km</div>
+                          <div className="text-xs text-muted-foreground">Distance</div>
+                        </div>
+                        <div className="text-center p-3 bg-gradient-card rounded-lg">
+                          <Clock className="h-5 w-5 text-primary mx-auto mb-1" />
+                          <div className="text-lg font-bold">{match.estimated_duration_hours}h</div>
+                          <div className="text-xs text-muted-foreground">Duration</div>
+                        </div>
+                        <div className="text-center p-3 bg-gradient-card rounded-lg">
+                          <DollarSign className="h-5 w-5 text-primary mx-auto mb-1" />
+                          <div className="text-lg font-bold">€{match.estimated_cost}</div>
+                          <div className="text-xs text-muted-foreground">Revenue</div>
+                        </div>
+                        <div className="text-center p-3 bg-gradient-card rounded-lg">
+                          <Star className="h-5 w-5 text-primary mx-auto mb-1" />
+                          <div className="text-lg font-bold">{Math.round(match.ai_insights.profitability)}%</div>
+                          <div className="text-xs text-muted-foreground">Profit Score</div>
                         </div>
                       </div>
-                      
-                      <div className="grid grid-cols-4 gap-4 text-sm mb-3">
-                        <div>
-                          <span className="text-muted-foreground">Weight:</span>
-                          <p className="font-medium">{load.weight}</p>
+
+                      {/* AI Insights */}
+                      <div className="mb-6">
+                        <h4 className="font-semibold mb-3 flex items-center">
+                          <Brain className="h-4 w-4 mr-2" />
+                          AI Analysis
+                        </h4>
+                        <div className="grid md:grid-cols-3 gap-4">
+                          <div>
+                            <div className="flex justify-between text-sm mb-1">
+                              <span>Profitability</span>
+                              <span>{Math.round(match.ai_insights.profitability)}%</span>
+                            </div>
+                            <Progress value={match.ai_insights.profitability} className="h-2" />
+                          </div>
+                          <div>
+                            <div className="flex justify-between text-sm mb-1">
+                              <span>Efficiency</span>
+                              <span>{Math.round(match.ai_insights.efficiency)}%</span>
+                            </div>
+                            <Progress value={match.ai_insights.efficiency} className="h-2" />
+                          </div>
+                          <div>
+                            <div className="flex justify-between text-sm mb-1">
+                              <span>Reliability</span>
+                              <span>{Math.round(match.ai_insights.reliability)}%</span>
+                            </div>
+                            <Progress value={match.ai_insights.reliability} className="h-2" />
+                          </div>
                         </div>
-                        <div>
-                          <span className="text-muted-foreground">Price:</span>
-                          <p className="font-medium text-primary">{load.price}</p>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <Badge variant={getRecommendationVariant(match.ai_insights.recommendation) as any}>
+                            <Star className="h-3 w-3 mr-1" />
+                            {match.ai_insights.recommendation}
+                          </Badge>
+                          <span className="text-sm text-muted-foreground">
+                            Pickup: {new Date(match.shipments.pickup_date).toLocaleDateString()}
+                          </span>
                         </div>
-                        <div>
-                          <span className="text-muted-foreground">Pickup:</span>
-                          <p className="font-medium">{load.pickup}</p>
-                        </div>
-                        <div className="flex justify-end">
-                          <Button variant="hero" size="sm">
-                            Bid Now
+                        <div className="flex space-x-2">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => viewMatchDetails(match.id)}
+                          >
+                            <Eye className="h-4 w-4 mr-1" />
+                            View Details
+                          </Button>
+                          <Button 
+                            variant="success" 
+                            size="sm"
+                            onClick={() => contactShipper(match.id)}
+                          >
+                            Contact Shipper
+                            <ArrowRight className="h-4 w-4 ml-1" />
                           </Button>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* My Trucks */}
-            <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Truck className="h-5 w-5 mr-2 text-primary" />
-                  My Fleet
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {myTrucks.map((truck) => (
-                    <div key={truck.id} className="border rounded-lg p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center space-x-3">
-                          <div className="bg-primary/10 p-2 rounded">
-                            <Truck className="h-4 w-4 text-primary" />
-                          </div>
-                          <div>
-                            <p className="font-medium">{truck.type}</p>
-                            <p className="text-sm text-muted-foreground">{truck.license}</p>
-                          </div>
-                        </div>
-                        <Badge variant={getStatusColor(truck.status) as any}>
-                          {truck.status}
-                        </Badge>
-                      </div>
-                      
-                      <div className="grid grid-cols-3 gap-4 text-sm">
-                        <div>
-                          <span className="text-muted-foreground">Driver:</span>
-                          <p className="font-medium">{truck.driver}</p>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">Location:</span>
-                          <p className="font-medium">{truck.location}</p>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">ETA:</span>
-                          <p className="font-medium">{truck.eta}</p>
-                        </div>
-                      </div>
-                      
-                      {truck.load && (
-                        <div className="mt-3 p-2 bg-accent/20 rounded">
-                          <p className="text-sm">Current Load: <span className="font-medium">{truck.load}</span></p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Performance */}
-            <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Star className="h-5 w-5 mr-2 text-primary" />
-                  Performance
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">On-Time Delivery</span>
-                  <span className="font-bold text-success">96%</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Customer Rating</span>
-                  <div className="flex items-center">
-                    <Star className="h-4 w-4 text-yellow-500 fill-current mr-1" />
-                    <span className="font-bold">4.8</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Fuel Efficiency</span>
-                  <span className="font-bold text-primary">12.5 L/100km</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Completed Loads</span>
-                  <span className="font-bold">234</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Quick Actions */}
-            <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Button variant="hero" className="w-full">
-                  <Route className="h-4 w-4 mr-2" />
-                  Browse Loads
-                </Button>
-                <Button variant="outline" className="w-full">
-                  <Fuel className="h-4 w-4 mr-2" />
-                  Log Fuel Stop
-                </Button>
-                <Button variant="outline" className="w-full">
-                  <Calendar className="h-4 w-4 mr-2" />
-                  Schedule Maintenance
-                </Button>
-                <Button variant="outline" className="w-full">
-                  <MessageCircle className="h-4 w-4 mr-2" />
-                  Contact Support
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Earnings */}
-            <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <DollarSign className="h-5 w-5 mr-2 text-primary" />
-                  This Month
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-primary">€18,650</p>
-                  <p className="text-sm text-muted-foreground">Total Revenue</p>
-                </div>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div className="text-center">
-                    <p className="font-bold">€15,320</p>
-                    <p className="text-muted-foreground">Paid</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="font-bold">€3,330</p>
-                    <p className="text-muted-foreground">Pending</p>
-                  </div>
-                </div>
-                <Button variant="outline" className="w-full">
-                  View Detailed Report
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Alerts */}
-            <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <AlertCircle className="h-5 w-5 mr-2 text-warning" />
-                  Alerts
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-start space-x-3 p-3 bg-warning/10 rounded-lg">
-                  <AlertCircle className="h-4 w-4 text-warning mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium">Maintenance Due</p>
-                    <p className="text-xs text-muted-foreground">TR002 needs service in 500km</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3 p-3 bg-success/10 rounded-lg">
-                  <CheckCircle className="h-4 w-4 text-success mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium">Load Delivered</p>
-                    <p className="text-xs text-muted-foreground">SH001 completed successfully</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </DashboardLayout>
   );

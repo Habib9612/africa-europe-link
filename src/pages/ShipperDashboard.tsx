@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,10 +18,14 @@ import {
   CheckCircle,
   BarChart3,
   FileText,
-  Calendar
+  Calendar,
+  Brain,
+  Zap,
+  Target
 } from "lucide-react";
 
 const ShipperDashboard = () => {
+  const navigate = useNavigate();
   const stats = [
     {
       title: "Active Shipments",
@@ -157,6 +162,51 @@ const ShipperDashboard = () => {
           ))}
         </div>
 
+        {/* AI Matching CTA */}
+        <Card className="shadow-glow bg-gradient-card border border-primary/20 mb-8">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="bg-gradient-primary p-4 rounded-xl">
+                  <Brain className="h-8 w-8 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-foreground mb-2">
+                    AI-Powered Carrier Matching
+                  </h3>
+                  <p className="text-muted-foreground mb-3">
+                    Find the perfect carriers for your shipments using our advanced AI algorithm
+                  </p>
+                  <div className="flex items-center space-x-4 text-sm">
+                    <div className="flex items-center text-primary">
+                      <Target className="h-4 w-4 mr-1" />
+                      95% Match Accuracy
+                    </div>
+                    <div className="flex items-center text-success">
+                      <Zap className="h-4 w-4 mr-1" />
+                      30% Cost Savings
+                    </div>
+                    <div className="flex items-center text-accent">
+                      <Clock className="h-4 w-4 mr-1" />
+                      Instant Results
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <Button 
+                variant="premium" 
+                size="lg"
+                onClick={() => navigate('/ai-matching')}
+                className="px-8 py-4"
+              >
+                <Brain className="h-5 w-5 mr-2" />
+                Try AI Matching
+                <Zap className="h-5 w-5 ml-2" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Active Shipments */}
           <div className="lg:col-span-2">
@@ -261,6 +311,14 @@ const ShipperDashboard = () => {
                 <Button variant="hero" className="w-full">
                   <Plus className="h-4 w-4 mr-2" />
                   New Shipment Request
+                </Button>
+                <Button 
+                  variant="premium" 
+                  className="w-full"
+                  onClick={() => navigate('/ai-matching')}
+                >
+                  <Brain className="h-4 w-4 mr-2" />
+                  AI Carrier Matching
                 </Button>
                 <Button variant="outline" className="w-full">
                   <Truck className="h-4 w-4 mr-2" />

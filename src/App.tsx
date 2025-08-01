@@ -13,6 +13,7 @@ import Dashboard from "./pages/Dashboard";
 import ShipperDashboard from "./pages/ShipperDashboard";
 import CarrierDashboard from "./pages/CarrierDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import AIMatching from "./pages/AIMatching";
 import Tracking from "./pages/Tracking";
 import NotFound from "./pages/NotFound";
 import Messages from "./pages/Messages";
@@ -163,6 +164,16 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <div className="p-6">Carriers - Coming Soon</div>
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* AI Matching Route */}
+            <Route 
+              path="/ai-matching" 
+              element={
+                <ProtectedRoute requiredRole="shipper">
+                  <AIMatching />
                 </ProtectedRoute>
               } 
             />

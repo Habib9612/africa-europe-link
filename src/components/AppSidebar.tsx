@@ -25,6 +25,8 @@ import {
   Fuel,
   Calendar,
   Activity,
+  Brain,
+  Zap,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Badge } from "@/components/ui/badge";
@@ -41,7 +43,7 @@ export function AppSidebar() {
     isActive ? "bg-primary/10 text-primary font-medium border-r-2 border-primary" : "hover:bg-muted/50 text-muted-foreground hover:text-foreground";
 
   const getMenuItems = () => {
-    const baseItems = [
+    const baseItems: Array<{title: string; url: string; icon: any; highlight?: boolean}> = [
       { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
       { title: "Messages", url: "/messages", icon: MessageSquare },
       { title: "Settings", url: "/settings", icon: Settings },
@@ -61,6 +63,7 @@ export function AppSidebar() {
       case 'individual':
         return [
           ...baseItems,
+          { title: "AI Matching", url: "/ai-matching", icon: Brain, highlight: true },
           { title: "Find Carriers", url: "/carriers", icon: Search },
           { title: "My Shipments", url: "/loads", icon: Package },
           { title: "Tracking", url: "/tracking", icon: MapPin },
@@ -125,7 +128,15 @@ export function AppSidebar() {
                     <NavLink to={item.url} className={getNavCls}>
                       <item.icon className="h-4 w-4 flex-shrink-0" />
                       {!collapsed && (
-                        <span className="ml-3 truncate">{item.title}</span>
+                        <span className="ml-3 truncate flex items-center">
+                          {item.title}
+                          {item.highlight && (
+                            <Badge variant="accent" className="ml-2 text-xs animate-pulse">
+                              <Zap className="h-3 w-3 mr-1" />
+                              NEW
+                            </Badge>
+                          )}
+                        </span>
                       )}
                     </NavLink>
                   </SidebarMenuButton>
