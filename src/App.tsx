@@ -19,6 +19,7 @@ import NotFound from "./pages/NotFound";
 import Messages from "./pages/Messages";
 import Settings from "./pages/Settings";
 import Analytics from "./pages/Analytics";
+import RoutesPage from "./pages/Routes";
 import AdminFleet from "./pages/AdminFleet";
 import AdminCompanies from "./pages/AdminCompanies";
 import AdminMonitor from "./pages/AdminMonitor";
@@ -139,7 +140,7 @@ const App = () => (
               path="/routes" 
               element={
                 <ProtectedRoute>
-                  <div className="p-6">Routes - Coming Soon</div>
+                  <RoutesPage />
                 </ProtectedRoute>
               } 
             />

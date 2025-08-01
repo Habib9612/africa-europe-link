@@ -109,6 +109,46 @@ serve(async (req) => {
             }),
             { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
           );
+        } else {
+          // Simple route optimization for existing routes
+          const { routeId } = await req.json();
+          
+          // Simulate route optimization for demo
+          const optimizationResult = {
+            routeId,
+            optimizedDistance: Math.floor(Math.random() * 100) + 1200,
+            estimatedTime: Math.floor(Math.random() * 4) + 16,
+            fuelSavings: Math.floor(Math.random() * 200) + 50,
+            costSavings: Math.floor(Math.random() * 300) + 100,
+            alternativeRoutes: [
+              {
+                name: "Highway Route",
+                distance: 1247,
+                duration: 18,
+                description: "Fastest route via major highways"
+              },
+              {
+                name: "Economic Route",
+                distance: 1198, 
+                duration: 19,
+                description: "Optimized for lowest fuel consumption"
+              }
+            ],
+            recommendations: [
+              "Depart during off-peak hours for better traffic",
+              "Consider the Economic Route for 15% fuel savings",
+              "Weather conditions are favorable"
+            ]
+          };
+
+          return new Response(
+            JSON.stringify({
+              success: true,
+              data: optimizationResult,
+              message: 'Route optimized successfully'
+            }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
         }
         break;
 
