@@ -46,17 +46,21 @@ export default function Dashboard() {
 
   // Redirect users to their role-specific dashboards
   useEffect(() => {
-    if (profile?.role === 'shipper' || profile?.role === 'individual') {
-      navigate('/shipper');
+    if (profile?.role === 'shipper' || profile?.role === 'individual' || profile?.role === 'company') {
+      navigate('/shipper-dashboard');
       return;
     }
     if (profile?.role === 'carrier') {
-      navigate('/carrier');
+      navigate('/carrier-dashboard');
       return;
     }
     if (profile?.role === 'admin') {
       navigate('/admin');
       return;
+    }
+    // Default fallback
+    if (profile?.role) {
+      navigate('/shipper-dashboard');
     }
   }, [profile, navigate]);
 

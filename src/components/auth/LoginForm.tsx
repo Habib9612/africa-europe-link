@@ -29,8 +29,6 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
     } else {
       // Remember email for future logins
       localStorage.setItem('remembered_email', email);
-      // Redirect will be handled by auth state change
-      window.location.href = '/dashboard';
     }
     
     setLoading(false);
@@ -67,17 +65,17 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
         // Account created, now try to login again
         const { error: secondLoginError } = await signIn(demoEmail, demoPassword);
         if (!secondLoginError) {
-          window.location.href = '/dashboard';
+          localStorage.setItem('remembered_email', demoEmail);
         } else {
           setError('Account created but login failed. Please try again.');
         }
       } else {
         setError(`Failed to create ${role} account: ${signUpError.message}`);
       }
-    } else if (!error) {
-      // Login successful
-      window.location.href = role === 'admin' ? '/admin' : '/dashboard';
-    } else {
+      } else if (!error) {
+        // Login successful - auth state change will handle redirect
+        localStorage.setItem('remembered_email', demoEmail);
+      } else {
       // Login failed for admin or other error
       setError(`Login failed: ${error.message}`);
     }

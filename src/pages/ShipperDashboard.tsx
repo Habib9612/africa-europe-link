@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { CarrierFinderForm } from "@/components/forms/CarrierFinderForm";
 import { CreateShipmentForm } from "@/components/shipments/CreateShipmentForm";
+import { ShipmentsList } from "@/components/shipments/ShipmentsList";
 
 const ShipperDashboard = () => {
   const navigate = useNavigate();
@@ -246,16 +247,7 @@ const ShipperDashboard = () => {
                 }} />
               </TabsContent>
               <TabsContent value="manage" className="mt-6">
-                <div className="text-center py-8">
-                  <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">Your Shipments</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Track and manage your posted shipments here
-                  </p>
-                  <Button variant="outline">
-                    View All Shipments
-                  </Button>
-                </div>
+                <ShipmentsList />
               </TabsContent>
             </Tabs>
           </CardContent>
