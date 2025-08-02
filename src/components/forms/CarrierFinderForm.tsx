@@ -88,12 +88,24 @@ export function CarrierFinderForm({ trigger }: CarrierFinderFormProps) {
   const handleBookCarrier = (carrier: any) => {
     toast({
       title: "Carrier contacted",
-      description: `Request sent to ${carrier.name}. They will respond within 30 minutes.`,
+      description: `Request sent to ${carrier.name}! They will respond within 30 minutes.`,
     });
     setOpen(false);
     setShowResults(false);
-    // Navigate to AI matching page to see the request
-    navigate('/ai-matching');
+    // Reset form
+    setFormData({
+      origin_city: '',
+      origin_state: '',
+      destination_city: '',
+      destination_state: '',
+      pickup_date: '',
+      delivery_date: '',
+      weight: '',
+      equipment_type: 'dry_van',
+      commodity: '',
+      max_rate: '',
+      special_requirements: ''
+    });
   };
 
   const updateFormData = (field: string, value: string) => {

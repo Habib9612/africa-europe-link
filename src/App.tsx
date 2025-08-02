@@ -189,7 +189,7 @@ const App = () => (
             <Route 
               path="/ai-matching" 
               element={
-                <ProtectedRoute requiredRole="shipper">
+                <ProtectedRoute>
                   <AIMatching />
                 </ProtectedRoute>
               } 

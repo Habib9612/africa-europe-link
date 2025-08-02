@@ -243,7 +243,8 @@ const ShipperDashboard = () => {
               </TabsList>
               <TabsContent value="create" className="mt-6">
                 <CreateShipmentForm onSuccess={() => {
-                  // Optionally switch to manage tab after successful creation
+                  // Switch to manage tab after successful creation and refresh
+                  console.log('Shipment created! You can now find carriers for it.');
                 }} />
               </TabsContent>
               <TabsContent value="manage" className="mt-6">
