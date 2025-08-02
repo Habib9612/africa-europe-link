@@ -35,6 +35,8 @@ export function SignupForm({ onToggleMode }: SignupFormProps) {
     if (signUpError) {
       setError(signUpError.message);
     } else {
+      // Remember email for future logins
+      localStorage.setItem('remembered_email', email);
       setSuccess('Account created successfully! You can now sign in.');
       // Clear form
       setEmail('');

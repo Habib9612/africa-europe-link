@@ -21,9 +21,11 @@ import {
   Calendar,
   Brain,
   Zap,
-  Target
+  Target,
+  List
 } from "lucide-react";
 import { CarrierFinderForm } from "@/components/forms/CarrierFinderForm";
+import { CreateShipmentForm } from "@/components/shipments/CreateShipmentForm";
 
 const ShipperDashboard = () => {
   const navigate = useNavigate();
@@ -215,6 +217,47 @@ const ShipperDashboard = () => {
                 />
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Shipment Management Tabs */}
+        <Card className="shadow-card">
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Package className="h-5 w-5 mr-2 text-primary" />
+              Shipment Management
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Tabs defaultValue="create" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="create" className="flex items-center">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Shipment
+                </TabsTrigger>
+                <TabsTrigger value="manage" className="flex items-center">
+                  <List className="h-4 w-4 mr-2" />
+                  My Shipments
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="create" className="mt-6">
+                <CreateShipmentForm onSuccess={() => {
+                  // Optionally switch to manage tab after successful creation
+                }} />
+              </TabsContent>
+              <TabsContent value="manage" className="mt-6">
+                <div className="text-center py-8">
+                  <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">Your Shipments</h3>
+                  <p className="text-muted-foreground mb-4">
+                    Track and manage your posted shipments here
+                  </p>
+                  <Button variant="outline">
+                    View All Shipments
+                  </Button>
+                </div>
+              </TabsContent>
+            </Tabs>
           </CardContent>
         </Card>
 

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Package, 
   TrendingUp, 
@@ -20,11 +21,14 @@ import {
   Zap,
   Target,
   ArrowRight,
-  Eye
+  Eye,
+  Search,
+  List
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { AvailableShipmentsList } from "@/components/shipments/AvailableShipmentsList";
 
 interface Match {
   id: string;
@@ -216,24 +220,44 @@ const CarrierDashboard = () => {
           ))}
         </div>
 
-        {/* AI Matches */}
+        {/* Load Management Tabs */}
         <Card className="shadow-card">
           <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Brain className="h-5 w-5 mr-2 text-primary" />
-                AI-Recommended Load Matches
-                <Badge variant="accent" className="ml-3 animate-pulse">
-                  <Zap className="h-3 w-3 mr-1" />
-                  Live
-                </Badge>
-              </div>
-              <Button variant="outline" onClick={fetchMatches} disabled={loading}>
-                Refresh
-              </Button>
+            <CardTitle className="flex items-center">
+              <Package className="h-5 w-5 mr-2 text-primary" />
+              Load Management
             </CardTitle>
           </CardHeader>
           <CardContent>
+            <Tabs defaultValue="available" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="available" className="flex items-center">
+                  <Search className="h-4 w-4 mr-2" />
+                  Browse Loads
+                </TabsTrigger>
+                <TabsTrigger value="ai-matches" className="flex items-center">
+                  <Brain className="h-4 w-4 mr-2" />
+                  AI Matches
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="available" className="mt-6">
+                <AvailableShipmentsList />
+              </TabsContent>
+              <TabsContent value="ai-matches" className="mt-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <Brain className="h-5 w-5 mr-2 text-primary" />
+                      AI-Recommended Load Matches
+                      <Badge variant="accent" className="ml-3 animate-pulse">
+                        <Zap className="h-3 w-3 mr-1" />
+                        Live
+                      </Badge>
+                    </div>
+                    <Button variant="outline" onClick={fetchMatches} disabled={loading}>
+                      Refresh
+                    </Button>
+                  </div>
             {loading ? (
               <div className="text-center py-12">
                 <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
@@ -367,7 +391,10 @@ const CarrierDashboard = () => {
                   </Card>
                 ))}
               </div>
-            )}
+                )}
+                </div>
+              </TabsContent>
+            </Tabs>
           </CardContent>
         </Card>
       </div>

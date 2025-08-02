@@ -11,7 +11,7 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ onToggleMode }: LoginFormProps) {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(() => localStorage.getItem('remembered_email') || '');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -27,6 +27,8 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
     if (signInError) {
       setError(signInError.message);
     } else {
+      // Remember email for future logins
+      localStorage.setItem('remembered_email', email);
       // Redirect will be handled by auth state change
       window.location.href = '/dashboard';
     }
