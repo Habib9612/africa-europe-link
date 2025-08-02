@@ -159,55 +159,75 @@ const AIMatchingDashboard = () => {
       </div>
 
       {/* Shipment Selection */}
-      <Card className="shadow-card">
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <Package className="h-5 w-5 mr-2" />
-            Select Shipment for Matching
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {shipments.map((shipment) => (
-              <Card 
-                key={shipment.id}
-                className={`cursor-pointer transition-all hover:shadow-elegant ${
-                  selectedShipment?.id === shipment.id 
-                    ? 'ring-2 ring-primary bg-gradient-card' 
-                    : 'hover:scale-105'
-                }`}
-                onClick={() => {
-                  setSelectedShipment(shipment);
-                  fetchExistingMatches(shipment.id);
-                }}
-              >
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge variant="outline">{shipment.equipment_type}</Badge>
-                    <span className="text-sm font-semibold text-primary">
-                      €{shipment.rate}
-                    </span>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="flex items-center text-sm">
-                      <MapPin className="h-4 w-4 text-muted-foreground mr-1" />
-                      {shipment.origin_city} → {shipment.destination_city}
+      {shipments.length === 0 ? (
+        <Card className="shadow-card border-2 border-dashed border-primary/20">
+          <CardContent className="p-8 text-center">
+            <Package className="h-16 w-16 text-primary mx-auto mb-4" />
+            <h3 className="text-xl font-semibold mb-2">No Shipments Found</h3>
+            <p className="text-muted-foreground mb-6">
+              You need to create shipments first before using AI matching. Create your first shipment to get started with intelligent carrier recommendations.
+            </p>
+            <Button 
+              size="lg" 
+              onClick={() => window.location.href = '/shipper-dashboard'}
+              className="bg-primary hover:bg-primary/90"
+            >
+              <Package className="h-5 w-5 mr-2" />
+              Create Your First Shipment
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card className="shadow-card">
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Package className="h-5 w-5 mr-2" />
+              Select Shipment for Matching
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {shipments.map((shipment) => (
+                <Card 
+                  key={shipment.id}
+                  className={`cursor-pointer transition-all hover:shadow-elegant ${
+                    selectedShipment?.id === shipment.id 
+                      ? 'ring-2 ring-primary bg-gradient-card' 
+                      : 'hover:scale-105'
+                  }`}
+                  onClick={() => {
+                    setSelectedShipment(shipment);
+                    fetchExistingMatches(shipment.id);
+                  }}
+                >
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <Badge variant="outline">{shipment.equipment_type}</Badge>
+                      <span className="text-sm font-semibold text-primary">
+                        €{shipment.rate}
+                      </span>
                     </div>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Clock className="h-4 w-4 mr-1" />
-                      {new Date(shipment.pickup_date).toLocaleDateString()}
+                    <div className="space-y-1">
+                      <div className="flex items-center text-sm">
+                        <MapPin className="h-4 w-4 text-muted-foreground mr-1" />
+                        {shipment.origin_city} → {shipment.destination_city}
+                      </div>
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <Clock className="h-4 w-4 mr-1" />
+                        {new Date(shipment.pickup_date).toLocaleDateString()}
+                      </div>
+                      <div className="text-sm font-medium">{shipment.commodity}</div>
                     </div>
-                    <div className="text-sm font-medium">{shipment.commodity}</div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* AI Analysis Button */}
-      {selectedShipment && (
+      {selectedShipment && shipments.length > 0 && (
         <div className="text-center">
           <Button 
             size="lg" 
