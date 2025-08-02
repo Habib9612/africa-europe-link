@@ -43,10 +43,12 @@ export function CreateShipmentForm({ onSuccess }: CreateShipmentFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) {
+      console.error('CreateShipmentForm: No user found');
       toast.error('Please log in to create a shipment');
       return;
     }
 
+    console.log('CreateShipmentForm: Starting shipment creation for user:', user.id);
     setLoading(true);
 
     try {
@@ -58,14 +60,19 @@ export function CreateShipmentForm({ onSuccess }: CreateShipmentFormProps) {
         status: 'posted'
       };
 
+      console.log('CreateShipmentForm: Submitting shipment data:', shipmentData);
+
       const { data, error } = await supabase
         .from('shipments')
         .insert(shipmentData)
         .select()
         .single();
 
+      console.log('CreateShipmentForm: Supabase response:', { data, error });
+
       if (error) throw error;
 
+      console.log('CreateShipmentForm: Shipment created successfully:', data);
       toast.success('Shipment posted successfully! Carriers can now bid on it.');
       
       // Reset form

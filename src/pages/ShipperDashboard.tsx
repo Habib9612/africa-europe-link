@@ -244,7 +244,9 @@ const ShipperDashboard = () => {
               <TabsContent value="create" className="mt-6">
                 <CreateShipmentForm onSuccess={() => {
                   // Switch to manage tab after successful creation and refresh
-                  console.log('Shipment created! You can now find carriers for it.');
+                  console.log('ShipperDashboard: Shipment created! You can now find carriers for it.');
+                  // Refresh the shipments list after creation
+                  window.dispatchEvent(new CustomEvent('shipment-created'));
                 }} />
               </TabsContent>
               <TabsContent value="manage" className="mt-6">

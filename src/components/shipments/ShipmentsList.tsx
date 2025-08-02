@@ -59,10 +59,27 @@ export function ShipmentsList({ onRefresh }: ShipmentsListProps) {
 
   useEffect(() => {
     fetchShipments();
+    
+    // Listen for shipment creation events to refresh the list
+    const handleShipmentCreated = () => {
+      console.log('ShipmentsList: Refreshing due to shipment creation');
+      fetchShipments();
+    };
+    
+    window.addEventListener('shipment-created', handleShipmentCreated);
+    
+    return () => {
+      window.removeEventListener('shipment-created', handleShipmentCreated);
+    };
   }, [user]);
 
   const fetchShipments = async () => {
-    if (!user) return;
+    if (!user) {
+      console.error('ShipmentsList: No user found');
+      return;
+    }
+    
+    console.log('ShipmentsList: Fetching shipments for user:', user.id);
     
     try {
       const { data, error } = await supabase
@@ -74,10 +91,15 @@ export function ShipmentsList({ onRefresh }: ShipmentsListProps) {
         .eq('shipper_id', user.id)
         .order('created_at', { ascending: false });
 
+      console.log('ShipmentsList: Supabase response:', { data, error, userIdUsed: user.id });
+
       if (error) throw error;
-      setShipments((data || []) as unknown as Shipment[]);
+      
+      const shipments = (data || []) as unknown as Shipment[];
+      console.log('ShipmentsList: Processed shipments:', shipments);
+      setShipments(shipments);
     } catch (error) {
-      console.error('Error fetching shipments:', error);
+      console.error('ShipmentsList: Error fetching shipments:', error);
       toast.error('Failed to fetch shipments');
     } finally {
       setLoading(false);
