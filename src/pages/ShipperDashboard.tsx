@@ -194,16 +194,26 @@ const ShipperDashboard = () => {
                   </div>
                 </div>
               </div>
-              <Button 
-                variant="premium" 
-                size="lg"
-                onClick={() => navigate('/ai-matching')}
-                className="px-8 py-4"
-              >
-                <Brain className="h-5 w-5 mr-2" />
-                Try AI Matching
-                <Zap className="h-5 w-5 ml-2" />
-              </Button>
+              <div className="flex gap-4">
+                <Button 
+                  variant="premium" 
+                  size="lg"
+                  onClick={() => navigate('/ai-matching')}
+                  className="px-8 py-4"
+                >
+                  <Brain className="h-5 w-5 mr-2" />
+                  Try AI Matching
+                  <Zap className="h-5 w-5 ml-2" />
+                </Button>
+                <CarrierFinderForm 
+                  trigger={
+                    <Button variant="accent" size="lg" className="px-8 py-4">
+                      <Truck className="h-5 w-5 mr-2" />
+                      Find Carriers
+                    </Button>
+                  }
+                />
+              </div>
             </div>
           </CardContent>
         </Card>

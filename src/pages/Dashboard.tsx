@@ -6,6 +6,8 @@ import { Package, Truck, Target, Activity, MapPin, BarChart3, Users, Fuel, Trend
 import { useAuth } from "@/hooks/useAuth";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const mockChartData = [
   { name: '1', value: 47 },
@@ -40,6 +42,23 @@ const maintenanceItems = [
 
 export default function Dashboard() {
   const { profile } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect users to their role-specific dashboards
+  useEffect(() => {
+    if (profile?.role === 'shipper' || profile?.role === 'individual') {
+      navigate('/shipper');
+      return;
+    }
+    if (profile?.role === 'carrier') {
+      navigate('/carrier');
+      return;
+    }
+    if (profile?.role === 'admin') {
+      navigate('/admin');
+      return;
+    }
+  }, [profile, navigate]);
 
   return (
     <DashboardLayout>
