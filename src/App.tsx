@@ -72,9 +72,25 @@ const App = () => (
               } 
             />
             <Route 
+              path="/shipper-dashboard" 
+              element={
+                <ProtectedRoute>
+                  <ShipperDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
               path="/carrier" 
               element={
                 <ProtectedRoute requiredRole="carrier">
+                  <CarrierDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/carrier-dashboard" 
+              element={
+                <ProtectedRoute>
                   <CarrierDashboard />
                 </ProtectedRoute>
               } 
