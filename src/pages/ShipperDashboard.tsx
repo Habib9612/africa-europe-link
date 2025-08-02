@@ -23,6 +23,7 @@ import {
   Zap,
   Target
 } from "lucide-react";
+import { CarrierFinderForm } from "@/components/forms/CarrierFinderForm";
 
 const ShipperDashboard = () => {
   const navigate = useNavigate();
@@ -320,10 +321,7 @@ const ShipperDashboard = () => {
                   <Brain className="h-4 w-4 mr-2" />
                   AI Carrier Matching
                 </Button>
-                <Button variant="outline" className="w-full">
-                  <Truck className="h-4 w-4 mr-2" />
-                  Find Carriers
-                </Button>
+                <CarrierFinderForm />
                 <Button variant="outline" className="w-full">
                   <BarChart3 className="h-4 w-4 mr-2" />
                   View Analytics

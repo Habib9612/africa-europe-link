@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Truck, Package, MapPin, Zap, CheckCircle2 } from "lucide-react";
+import { LoadFinderForm } from "@/components/forms/LoadFinderForm";
 const Hero = () => {
   const stats = [{
     label: "Trucks",
@@ -75,9 +76,7 @@ const Hero = () => {
                 <input type="text" placeholder="Enter destination" className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg transition-all duration-200" />
               </div>
 
-              <Button className="w-full bg-green-500 hover:bg-green-600 text-white py-4 text-xl font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                Request now
-              </Button>
+              <LoadFinderForm />
             </div>
           </div>
         </div>
