@@ -74,8 +74,11 @@ export function CarrierFinderForm({ trigger }: CarrierFinderFormProps) {
     e.preventDefault();
     setLoading(true);
     
+    console.log('CarrierFinderForm: Submit triggered with data:', formData);
+    
     // Validate form data
     if (!formData.origin_city.trim() || !formData.destination_city.trim() || !formData.weight.trim() || !formData.max_rate.trim()) {
+      console.log('CarrierFinderForm: Validation failed');
       toast({
         title: "Missing Information",
         description: "Please fill in all required fields before searching.",
@@ -85,8 +88,10 @@ export function CarrierFinderForm({ trigger }: CarrierFinderFormProps) {
       return;
     }
     
+    console.log('CarrierFinderForm: Starting search simulation...');
     // Simulate search delay
     setTimeout(() => {
+      console.log('CarrierFinderForm: Search completed, showing results');
       setLoading(false);
       setShowResults(true);
       toast({
@@ -131,8 +136,11 @@ export function CarrierFinderForm({ trigger }: CarrierFinderFormProps) {
   );
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+    <Dialog open={open} onOpenChange={(newOpen) => {
+      console.log('CarrierFinderForm: Dialog state changing to:', newOpen);
+      setOpen(newOpen);
+    }}>
+      <DialogTrigger asChild onClick={() => console.log('CarrierFinderForm: Trigger clicked')}>
         {trigger || defaultTrigger}
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
