@@ -129,7 +129,14 @@ export function CarrierFinderForm({ trigger }: CarrierFinderFormProps) {
   };
 
   const defaultTrigger = (
-    <Button variant="outline" className="w-full">
+    <Button 
+      variant="outline" 
+      className="w-full"
+      onClick={() => {
+        console.log('Default trigger clicked - opening dialog');
+        setOpen(true);
+      }}
+    >
       <Truck className="h-4 w-4 mr-2" />
       Find Carriers
     </Button>
@@ -140,9 +147,13 @@ export function CarrierFinderForm({ trigger }: CarrierFinderFormProps) {
       console.log('CarrierFinderForm: Dialog state changing to:', newOpen);
       setOpen(newOpen);
     }}>
-      <DialogTrigger asChild onClick={() => console.log('CarrierFinderForm: Trigger clicked')}>
-        {trigger || defaultTrigger}
-      </DialogTrigger>
+      {trigger ? (
+        <DialogTrigger asChild onClick={() => console.log('CarrierFinderForm: Custom trigger clicked')}>
+          {trigger}
+        </DialogTrigger>
+      ) : (
+        defaultTrigger
+      )}
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center">
