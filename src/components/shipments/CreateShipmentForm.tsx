@@ -73,7 +73,15 @@ export function CreateShipmentForm({ onSuccess }: CreateShipmentFormProps) {
       if (error) throw error;
 
       console.log('CreateShipmentForm: Shipment created successfully:', data);
-      toast.success('Shipment posted successfully! Carriers can now bid on it.');
+      toast.success('🚚 Shipment posted successfully! Carriers can now see and bid on your load.');
+      
+      // Optional: Auto-switch to "My Shipments" tab to show the new shipment
+      setTimeout(() => {
+        const manageTab = document.querySelector('[data-value="manage"]') as HTMLElement;
+        if (manageTab) {
+          manageTab.click();
+        }
+      }, 1000);
       
       // Reset form
       setFormData({

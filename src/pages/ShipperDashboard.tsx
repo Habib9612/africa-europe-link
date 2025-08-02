@@ -24,7 +24,7 @@ import {
   Target,
   List
 } from "lucide-react";
-import { CarrierFinderForm } from "@/components/forms/CarrierFinderForm";
+import { toast } from "sonner";
 import { CreateShipmentForm } from "@/components/shipments/CreateShipmentForm";
 import { ShipmentsList } from "@/components/shipments/ShipmentsList";
 
@@ -179,7 +179,7 @@ const ShipperDashboard = () => {
                     AI-Powered Carrier Matching
                   </h3>
                   <p className="text-muted-foreground mb-3">
-                    Find the perfect carriers for your shipments using our advanced AI algorithm
+                    Post your shipments and let our AI find the best carriers for you
                   </p>
                   <div className="flex items-center space-x-4 text-sm">
                     <div className="flex items-center text-primary">
@@ -208,14 +208,6 @@ const ShipperDashboard = () => {
                   Try AI Matching
                   <Zap className="h-5 w-5 ml-2" />
                 </Button>
-                <CarrierFinderForm 
-                  trigger={
-                    <Button variant="accent" size="lg" className="px-8 py-4">
-                      <Truck className="h-5 w-5 mr-2" />
-                      Find Carriers
-                    </Button>
-                  }
-                />
               </div>
             </div>
           </CardContent>
@@ -243,14 +235,18 @@ const ShipperDashboard = () => {
               </TabsList>
               <TabsContent value="create" className="mt-6">
                 <CreateShipmentForm onSuccess={() => {
-                  // Switch to manage tab after successful creation and refresh
                   console.log('ShipperDashboard: Shipment created! You can now find carriers for it.');
                   // Refresh the shipments list after creation
                   window.dispatchEvent(new CustomEvent('shipment-created'));
+                  // Show success message with next steps
+                  toast.success('🚚 Shipment posted! Carriers can now see and bid on your load.');
                 }} />
               </TabsContent>
               <TabsContent value="manage" className="mt-6">
-                <ShipmentsList />
+                <ShipmentsList onRefresh={() => {
+                  // Handle any additional refresh logic if needed
+                  console.log('ShipperDashboard: Shipments list refreshed');
+                }} />
               </TabsContent>
             </Tabs>
           </CardContent>
@@ -369,7 +365,6 @@ const ShipperDashboard = () => {
                   <Brain className="h-4 w-4 mr-2" />
                   AI Carrier Matching
                 </Button>
-                <CarrierFinderForm />
                 <Button variant="outline" className="w-full">
                   <BarChart3 className="h-4 w-4 mr-2" />
                   View Analytics
