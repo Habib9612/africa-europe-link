@@ -92,6 +92,7 @@ export function CarrierFinderForm({ trigger }: CarrierFinderFormProps) {
     });
     setOpen(false);
     setShowResults(false);
+    // Navigate to AI matching page to see the request
     navigate('/ai-matching');
   };
 
