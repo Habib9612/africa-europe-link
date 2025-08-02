@@ -75,7 +75,7 @@ export function CarrierFinderForm({ trigger }: CarrierFinderFormProps) {
     setLoading(true);
     
     // Validate form data
-    if (!formData.origin_city || !formData.destination_city || !formData.weight || !formData.max_rate) {
+    if (!formData.origin_city.trim() || !formData.destination_city.trim() || !formData.weight.trim() || !formData.max_rate.trim()) {
       toast({
         title: "Missing Information",
         description: "Please fill in all required fields before searching.",
