@@ -2,10 +2,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Users, Truck, Package, TrendingUp, Settings, Activity } from "lucide-react";
+import { Users, Truck, Package, TrendingUp, Settings, Activity, Database } from "lucide-react";
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { useState } from "react";
+import { DataTester } from "@/components/debug/DataTester";
 
 export default function AdminDashboard() {
+  const [showDataTester, setShowDataTester] = useState(false);
+  
   const systemMetrics = [
     { title: "Total Users", value: "12,847", change: "+12%", icon: Users },
     { title: "Active Carriers", value: "3,241", change: "+8%", icon: Truck },
@@ -40,7 +44,7 @@ export default function AdminDashboard() {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Button variant="outline" className="h-20 flex flex-col items-center space-y-2">
             <Users className="h-6 w-6" />
             <span>Manage Users</span>
@@ -53,7 +57,21 @@ export default function AdminDashboard() {
             <Settings className="h-6 w-6" />
             <span>System Settings</span>
           </Button>
+          <Button 
+            variant="outline" 
+            className="h-20 flex flex-col items-center space-y-2"
+            onClick={() => setShowDataTester(!showDataTester)}
+          >
+            <Database className="h-6 w-6" />
+            <span>Data Tester</span>
+          </Button>
         </div>
+
+        {showDataTester && (
+          <div className="mt-6">
+            <DataTester />
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );

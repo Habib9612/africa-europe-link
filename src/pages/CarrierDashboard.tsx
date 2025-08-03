@@ -28,7 +28,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
-import { AvailableShipmentsList } from "@/components/shipments/AvailableShipmentsList";
+import { ShipmentsList } from "@/components/shipments/ShipmentsList";
 
 interface Match {
   id: string;
@@ -241,7 +241,12 @@ const CarrierDashboard = () => {
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="available" className="mt-6">
-                <AvailableShipmentsList />
+                <ShipmentsList 
+                  showMyShipments={false}
+                  onRefresh={() => {
+                    console.log('CarrierDashboard: Shipments list refreshed');
+                  }} 
+                />
               </TabsContent>
               <TabsContent value="ai-matches" className="mt-6">
                 <div className="space-y-4">

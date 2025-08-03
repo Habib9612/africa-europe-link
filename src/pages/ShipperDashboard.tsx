@@ -243,10 +243,13 @@ const ShipperDashboard = () => {
                 }} />
               </TabsContent>
               <TabsContent value="manage" className="mt-6">
-                <ShipmentsList onRefresh={() => {
-                  // Handle any additional refresh logic if needed
-                  console.log('ShipperDashboard: Shipments list refreshed');
-                }} />
+                <ShipmentsList 
+                  showMyShipments={true}
+                  onRefresh={() => {
+                    // Handle any additional refresh logic if needed
+                    console.log('ShipperDashboard: Shipments list refreshed');
+                  }} 
+                />
               </TabsContent>
             </Tabs>
           </CardContent>
