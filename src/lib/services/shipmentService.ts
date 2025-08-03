@@ -52,7 +52,7 @@ export class ShipmentService {
         .from('shipments')
         .select(`
           *,
-          shipper:profiles!shipments_shipper_id_fkey(
+          shipper:profiles!profiles_user_id_fkey(
             id,
             full_name
           )
@@ -61,7 +61,18 @@ export class ShipmentService {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data || [];
+      
+      // Transform data to match Shipment interface
+      return (data || []).map(item => ({
+        ...item,
+        bid_count: item.bid_count || 0,
+        tracking_status: item.tracking_status || 'pending',
+        payment_status: item.payment_status || 'pending',
+        shipper: item.shipper ? {
+          id: item.shipper.id,
+          full_name: item.shipper.full_name
+        } : undefined
+      }));
     } catch (error) {
       console.error('Error fetching available shipments:', error);
       throw error;
@@ -75,11 +86,11 @@ export class ShipmentService {
         .from('shipments')
         .select(`
           *,
-          shipper:profiles!shipments_shipper_id_fkey(
+          shipper:profiles!profiles_user_id_fkey(
             id,
             full_name
           ),
-          carrier:profiles!shipments_carrier_id_fkey(
+          carrier:profiles!profiles_user_id_fkey(
             id,
             full_name
           )
@@ -88,7 +99,22 @@ export class ShipmentService {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data || [];
+      
+      // Transform data to match Shipment interface
+      return (data || []).map(item => ({
+        ...item,
+        bid_count: item.bid_count || 0,
+        tracking_status: item.tracking_status || 'pending',
+        payment_status: item.payment_status || 'pending',
+        shipper: item.shipper ? {
+          id: item.shipper.id,
+          full_name: item.shipper.full_name
+        } : undefined,
+        carrier: item.carrier ? {
+          id: item.carrier.id,
+          full_name: item.carrier.full_name
+        } : undefined
+      }));
     } catch (error) {
       console.error('Error fetching shipper shipments:', error);
       throw error;
@@ -102,7 +128,7 @@ export class ShipmentService {
         .from('shipments')
         .select(`
           *,
-          shipper:profiles!shipments_shipper_id_fkey(
+          shipper:profiles!profiles_user_id_fkey(
             id,
             full_name
           )
@@ -111,7 +137,18 @@ export class ShipmentService {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data || [];
+      
+      // Transform data to match Shipment interface
+      return (data || []).map(item => ({
+        ...item,
+        bid_count: item.bid_count || 0,
+        tracking_status: item.tracking_status || 'pending',
+        payment_status: item.payment_status || 'pending',
+        shipper: item.shipper ? {
+          id: item.shipper.id,
+          full_name: item.shipper.full_name
+        } : undefined
+      }));
     } catch (error) {
       console.error('Error fetching carrier shipments:', error);
       throw error;

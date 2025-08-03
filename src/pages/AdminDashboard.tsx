@@ -6,9 +6,11 @@ import { Users, Truck, Package, TrendingUp, Settings, Activity, Database } from 
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { useState } from "react";
 import { DataTester } from "@/components/debug/DataTester";
+import { DataFlowTester } from "@/components/debug/DataFlowTester";
 
 export default function AdminDashboard() {
   const [showDataTester, setShowDataTester] = useState(false);
+  const [showDataFlowTester, setShowDataFlowTester] = useState(false);
   
   const systemMetrics = [
     { title: "Total Users", value: "12,847", change: "+12%", icon: Users },
@@ -65,11 +67,25 @@ export default function AdminDashboard() {
             <Database className="h-6 w-6" />
             <span>Data Tester</span>
           </Button>
+          <Button 
+            variant="outline" 
+            className="h-20 flex flex-col items-center space-y-2"
+            onClick={() => setShowDataFlowTester(!showDataFlowTester)}
+          >
+            <Database className="h-6 w-6" />
+            <span>Data Flow Tester</span>
+          </Button>
         </div>
 
         {showDataTester && (
           <div className="mt-6">
             <DataTester />
+          </div>
+        )}
+        
+        {showDataFlowTester && (
+          <div className="mt-6">
+            <DataFlowTester />
           </div>
         )}
       </div>

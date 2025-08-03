@@ -59,26 +59,50 @@ export function ShipmentsList({ onRefresh, showMyShipments = false }: ShipmentsL
 
   const fetchShipments = async () => {
     try {
-      let data: Shipment[] = [];
+      let data: any[] = [];
       
       if (showMyShipments) {
         // Show user's own shipments
         if (profile?.role === 'shipper') {
-          data = await ShipmentService.getShipperShipments(user?.id || '');
+          const { data: shipments, error } = await supabase
+            .from('shipments')
+            .select('*')
+            .eq('shipper_id', user?.id)
+            .order('created_at', { ascending: false });
+          
+          if (error) throw error;
+          data = shipments || [];
         } else if (profile?.role === 'carrier') {
-          data = await ShipmentService.getCarrierShipments(user?.id || '');
+          const { data: shipments, error } = await supabase
+            .from('shipments')
+            .select('*')
+            .eq('carrier_id', user?.id)
+            .order('created_at', { ascending: false });
+          
+          if (error) throw error;
+          data = shipments || [];
         }
       } else {
         // Show available shipments for carriers
-        if (profile?.role === 'carrier') {
-          data = await ShipmentService.getAvailableShipments();
-        } else {
-          // For other roles, show all shipments they can access
-          data = await ShipmentService.getAvailableShipments();
-        }
+        const { data: shipments, error } = await supabase
+          .from('shipments')
+          .select('*')
+          .eq('status', 'posted')
+          .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        data = shipments || [];
       }
 
-      setShipments(data);
+      // Transform data to match Shipment interface
+      const transformedData = data.map(item => ({
+        ...item,
+        bid_count: item.bid_count || 0,
+        tracking_status: item.tracking_status || 'pending',
+        payment_status: item.payment_status || 'pending'
+      }));
+
+      setShipments(transformedData);
     } catch (error: any) {
       console.error('Error fetching shipments:', error);
       toast({
