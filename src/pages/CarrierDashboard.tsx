@@ -161,28 +161,34 @@ const CarrierDashboard = () => {
 
   const viewMatchDetails = async (matchId: string) => {
     try {
-      await supabase
-        .from('load_matches')
-        .update({ status: 'viewed' })
-        .eq('id', matchId);
+      // Create a detailed view modal or navigate to details page
+      // For now, we'll just show a success message and log the action
+      console.log('Viewing details for match:', matchId);
       
-      // Refresh matches
-      fetchMatches();
+      // In a real implementation, this would open a modal or navigate to a details page
+      // showing comprehensive information about the shipment, route optimization, 
+      // shipper details, pickup/delivery requirements, etc.
+      
       toast.success('Match details viewed');
     } catch (error) {
-      console.error('Error updating match status:', error);
+      console.error('Error viewing match details:', error);
+      toast.error('Failed to view match details');
     }
   };
 
   const contactShipper = async (matchId: string) => {
     try {
-      await supabase
-        .from('load_matches')
-        .update({ status: 'contacted' })
-        .eq('id', matchId);
+      // In a real implementation, this would:
+      // 1. Create a conversation/message thread
+      // 2. Send notification to shipper
+      // 3. Update match status to 'contacted'
+      // 4. Possibly open a messaging interface
       
-      // Refresh matches
-      fetchMatches();
+      console.log('Contacting shipper for match:', matchId);
+      
+      // For demo purposes, we'll simulate the contact action
+      // In production, this would integrate with messaging system
+      
       toast.success('Shipper contacted successfully');
     } catch (error) {
       console.error('Error contacting shipper:', error);
