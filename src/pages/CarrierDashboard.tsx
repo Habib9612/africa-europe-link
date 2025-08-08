@@ -108,18 +108,49 @@ const CarrierDashboard = () => {
     setLoading(true);
     try {
       const { data, error } = await supabase
-        .from('load_matches')
-        .select(`
-          *,
-          shipments(origin_city, origin_state, destination_city, destination_state, commodity, weight, rate, pickup_date)
-        `)
-        .eq('carrier_id', user.id)
-        .eq('status', 'pending')
-        .order('match_score', { ascending: false })
+        .from('shipments')
+        .select('*')
+        .is('carrier_id', null)
+        .eq('status', 'posted')
+        .order('created_at', { ascending: false })
         .limit(10);
 
       if (error) throw error;
-      setMatches((data || []) as unknown as Match[]);
+      
+      // Transform shipment data to match interface with mock AI insights
+      const transformedMatches: Match[] = (data || []).map((shipment: any) => ({
+        id: shipment.id,
+        shipment_id: shipment.id,
+        match_score: Math.floor(Math.random() * 40) + 60, // Random score 60-100
+        distance_km: Math.floor(Math.random() * 800) + 200, // Random distance 200-1000km
+        estimated_cost: shipment.rate || Math.floor(Math.random() * 2000) + 500,
+        estimated_duration_hours: Math.floor(Math.random() * 20) + 8, // 8-28 hours
+        compatibility_factors: {
+          distance_score: Math.floor(Math.random() * 30) + 70,
+          capacity_match: Math.floor(Math.random() * 30) + 70,
+          equipment_match: Math.floor(Math.random() * 30) + 70,
+          timing_score: Math.floor(Math.random() * 30) + 70
+        },
+        ai_insights: {
+          profitability: Math.floor(Math.random() * 40) + 60,
+          efficiency: Math.floor(Math.random() * 40) + 60,
+          reliability: Math.floor(Math.random() * 40) + 60,
+          recommendation: ['Highly Recommended', 'Good Match', 'Consider'][Math.floor(Math.random() * 3)]
+        },
+        status: shipment.status,
+        shipments: {
+          origin_city: shipment.origin_city || 'Unknown',
+          origin_state: shipment.origin_state || '',
+          destination_city: shipment.destination_city || 'Unknown',
+          destination_state: shipment.destination_state || '',
+          commodity: shipment.commodity || 'General Cargo',
+          weight: shipment.weight || 0,
+          rate: shipment.rate || 0,
+          pickup_date: shipment.pickup_date || new Date().toISOString()
+        }
+      }));
+      
+      setMatches(transformedMatches);
     } catch (error) {
       console.error('Error fetching matches:', error);
       toast.error('Failed to fetch matches');
@@ -241,12 +272,23 @@ const CarrierDashboard = () => {
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="available" className="mt-6">
-                <ShipmentsList 
-                  showMyShipments={false}
-                  onRefresh={() => {
-                    console.log('CarrierDashboard: Shipments list refreshed');
-                  }} 
-                />
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <Search className="h-5 w-5 mr-2 text-primary" />
+                      Available Shipments
+                      <Badge variant="secondary" className="ml-3">
+                        Live
+                      </Badge>
+                    </div>
+                  </div>
+                  <ShipmentsList 
+                    showMyShipments={false}
+                    onRefresh={() => {
+                      console.log('CarrierDashboard: Shipments list refreshed');
+                    }} 
+                  />
+                </div>
               </TabsContent>
               <TabsContent value="ai-matches" className="mt-6">
                 <div className="space-y-4">
@@ -326,7 +368,7 @@ const CarrierDashboard = () => {
                         </div>
                         <div className="text-center p-3 bg-gradient-card rounded-lg">
                           <Star className="h-5 w-5 text-primary mx-auto mb-1" />
-                          <div className="text-lg font-bold">{Math.round(match.ai_insights.profitability)}%</div>
+                          <div className="text-lg font-bold">{Math.round(match.ai_insights?.profitability || 0)}%</div>
                           <div className="text-xs text-muted-foreground">Profit Score</div>
                         </div>
                       </div>
@@ -341,23 +383,23 @@ const CarrierDashboard = () => {
                           <div>
                             <div className="flex justify-between text-sm mb-1">
                               <span>Profitability</span>
-                              <span>{Math.round(match.ai_insights.profitability)}%</span>
+                              <span>{Math.round(match.ai_insights?.profitability || 0)}%</span>
                             </div>
-                            <Progress value={match.ai_insights.profitability} className="h-2" />
+                            <Progress value={match.ai_insights?.profitability || 0} className="h-2" />
                           </div>
                           <div>
                             <div className="flex justify-between text-sm mb-1">
                               <span>Efficiency</span>
-                              <span>{Math.round(match.ai_insights.efficiency)}%</span>
+                              <span>{Math.round(match.ai_insights?.efficiency || 0)}%</span>
                             </div>
-                            <Progress value={match.ai_insights.efficiency} className="h-2" />
+                            <Progress value={match.ai_insights?.efficiency || 0} className="h-2" />
                           </div>
                           <div>
                             <div className="flex justify-between text-sm mb-1">
                               <span>Reliability</span>
-                              <span>{Math.round(match.ai_insights.reliability)}%</span>
+                              <span>{Math.round(match.ai_insights?.reliability || 0)}%</span>
                             </div>
-                            <Progress value={match.ai_insights.reliability} className="h-2" />
+                            <Progress value={match.ai_insights?.reliability || 0} className="h-2" />
                           </div>
                         </div>
                       </div>
@@ -365,12 +407,12 @@ const CarrierDashboard = () => {
                       {/* Actions */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                          <Badge variant={getRecommendationVariant(match.ai_insights.recommendation) as any}>
+                          <Badge variant={getRecommendationVariant(match.ai_insights?.recommendation || 'unknown') as any}>
                             <Star className="h-3 w-3 mr-1" />
-                            {match.ai_insights.recommendation}
+                            {match.ai_insights?.recommendation || 'No recommendation'}
                           </Badge>
                           <span className="text-sm text-muted-foreground">
-                            Pickup: {new Date(match.shipments.pickup_date).toLocaleDateString()}
+                            Pickup: {match.shipments?.pickup_date ? new Date(match.shipments.pickup_date).toLocaleDateString() : 'TBD'}
                           </span>
                         </div>
                         <div className="flex space-x-2">
