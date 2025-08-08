@@ -32,13 +32,40 @@ const ContactShipperModal: React.FC<ContactShipperModalProps> = ({
   if (!isOpen) return null;
 
   const handleSendMessage = async () => {
+    if (!message.trim()) return;
+    
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    alert(`Message sent to ${shipper.name} successfully!`);
-    setMessage('');
-    setIsSubmitting(false);
-    onClose();
+    try {
+      const response = await fetch('/api/messages/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          senderId: 'current-carrier-id', // Replace with actual carrier ID
+          receiverId: shipper.id,
+          message: message.trim(),
+          senderName: 'Current Carrier', // Replace with actual carrier name
+          receiverName: shipper.name,
+          conversationId: `carrier-${shipper.id}`
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(`Message sent to ${shipper.name} successfully!`);
+        setMessage('');
+        onClose();
+      } else {
+        alert('Failed to send message: ' + result.message);
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      alert('Failed to send message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handlePhoneCall = () => {
