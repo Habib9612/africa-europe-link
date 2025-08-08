@@ -29,6 +29,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { ShipmentsList } from "@/components/shipments/ShipmentsList";
+import ShipmentDetailsModal from '../components/modals/ShipmentDetailsModal';
+import ContactShipperModal from '../components/modals/ContactShipperModal';
 
 interface Match {
   id: string;
@@ -66,6 +68,10 @@ const CarrierDashboard = () => {
   const { user } = useAuth();
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(false);
+  const [selectedShipmentForDetails, setSelectedShipmentForDetails] = useState<any>(null);
+  const [selectedShipper, setSelectedShipper] = useState<any>(null);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
 
   const stats = [
     {
@@ -425,7 +431,28 @@ const CarrierDashboard = () => {
                           <Button 
                             variant="outline" 
                             size="sm"
-                            onClick={() => viewMatchDetails(match.id)}
+                            onClick={() => {
+                              setSelectedShipmentForDetails({
+                                id: match.shipment_id,
+                                origin: 'Tangier, Morocco',
+                                destination: 'Quelimane, Mozambique',
+                                pickupDate: match.shipments?.pickup_date || '2025-08-15',
+                                deliveryDate: '2025-08-25',
+                                cargoType: match.shipments?.commodity || 'General Cargo',
+                                weight: match.shipments?.weight?.toString() + ' kg' || '15,000 kg',
+                                dimensions: '12m x 2.5m x 2.8m',
+                                revenue: '€' + match.estimated_cost,
+                                matchScore: match.match_score + '%',
+                                distance: match.distance_km + ' km',
+                                requirements: ['Temperature controlled', 'GPS tracking', 'Insurance required'],
+                                shipper: {
+                                  name: 'Ahmed Hassan',
+                                  company: 'Atlas Trading Co.',
+                                  rating: 4
+                                }
+                              });
+                              setShowDetailsModal(true);
+                            }}
                           >
                             <Eye className="h-4 w-4 mr-1" />
                             View Details
@@ -433,7 +460,20 @@ const CarrierDashboard = () => {
                           <Button 
                             variant="success" 
                             size="sm"
-                            onClick={() => contactShipper(match.id)}
+                            onClick={() => {
+                              setSelectedShipper({
+                                id: 'shipper-001',
+                                name: 'Ahmed Hassan',
+                                company: 'Atlas Trading Co.',
+                                email: 'ahmed@atlastrading.com',
+                                phone: '+212-555-0123',
+                                rating: 4,
+                                totalShipments: 89,
+                                responseTime: '1.5 hours',
+                                preferredContact: 'email'
+                              });
+                              setShowContactModal(true);
+                            }}
                           >
                             Contact Shipper
                             <ArrowRight className="h-4 w-4 ml-1" />
@@ -450,6 +490,20 @@ const CarrierDashboard = () => {
             </Tabs>
           </CardContent>
         </Card>
+        
+        {/* Modals */}
+        <ShipmentDetailsModal
+          isOpen={showDetailsModal}
+          onClose={() => setShowDetailsModal(false)}
+          shipment={selectedShipmentForDetails}
+        />
+        
+        <ContactShipperModal
+          isOpen={showContactModal}
+          onClose={() => setShowContactModal(false)}
+          shipper={selectedShipper}
+          shipmentId={selectedShipmentForDetails?.id || 'SHIP-001'}
+        />
       </div>
     </DashboardLayout>
   );

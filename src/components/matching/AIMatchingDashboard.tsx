@@ -19,6 +19,8 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import ShipmentDetailsModal from '../modals/ShipmentDetailsModal';
+import ContactShipperModal from '../modals/ContactShipperModal';
 
 interface Match {
   id: string;
@@ -67,6 +69,10 @@ const AIMatchingDashboard = () => {
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
+  const [selectedShipmentForDetails, setSelectedShipmentForDetails] = useState<any>(null);
+  const [selectedShipper, setSelectedShipper] = useState<any>(null);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
 
   useEffect(() => {
     fetchShipments();
@@ -396,10 +402,52 @@ const AIMatchingDashboard = () => {
                       </Badge>
                       
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            setSelectedShipmentForDetails({
+                              id: selectedShipment?.id || 'SHIP-001',
+                              origin: selectedShipment?.pickup_location || 'Tangier, Morocco',
+                              destination: selectedShipment?.delivery_location || 'Quelimane, Mozambique',
+                              pickupDate: selectedShipment?.pickup_date || '2025-08-15',
+                              deliveryDate: selectedShipment?.delivery_date || '2025-08-25',
+                              cargoType: selectedShipment?.commodity || 'General Cargo',
+                              weight: selectedShipment?.weight?.toString() + ' kg' || '15,000 kg',
+                              dimensions: '12m x 2.5m x 2.8m',
+                              revenue: '€' + match.estimated_cost,
+                              matchScore: match.match_score + '%',
+                              distance: match.distance_km + ' km',
+                              requirements: ['Temperature controlled', 'GPS tracking', 'Insurance required'],
+                              shipper: {
+                                name: 'Ahmed Hassan',
+                                company: 'Atlas Trading Co.',
+                                rating: 4
+                              }
+                            });
+                            setShowDetailsModal(true);
+                          }}
+                        >
                           View Details
                         </Button>
-                        <Button size="sm" className="bg-success hover:bg-success/90">
+                        <Button 
+                          size="sm" 
+                          className="bg-success hover:bg-success/90"
+                          onClick={() => {
+                            setSelectedShipper({
+                              id: match.carrier_id,
+                              name: match.profiles.full_name,
+                              company: 'Transport Solutions Ltd.',
+                              email: 'contact@transportsolutions.com',
+                              phone: '+212-555-0123',
+                              rating: 4,
+                              totalShipments: 156,
+                              responseTime: '2 hours',
+                              preferredContact: 'email'
+                            });
+                            setShowContactModal(true);
+                          }}
+                        >
                           Contact Carrier
                           <ArrowRight className="h-4 w-4 ml-1" />
                         </Button>
@@ -412,6 +460,20 @@ const AIMatchingDashboard = () => {
           </div>
         </div>
       )}
+      
+      {/* Modals */}
+      <ShipmentDetailsModal
+        isOpen={showDetailsModal}
+        onClose={() => setShowDetailsModal(false)}
+        shipment={selectedShipmentForDetails}
+      />
+      
+      <ContactShipperModal
+        isOpen={showContactModal}
+        onClose={() => setShowContactModal(false)}
+        shipper={selectedShipper}
+        shipmentId={selectedShipment?.id || 'SHIP-001'}
+      />
     </div>
   );
 };
