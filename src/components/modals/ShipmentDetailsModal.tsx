@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, MapPin, Calendar, Package, Truck, DollarSign, Clock, User, CheckCircle } from 'lucide-react';
+import React from 'react';
+import { X, MapPin, Calendar, Package, Truck, DollarSign, Clock, User } from 'lucide-react';
 
 interface ShipmentDetailsModalProps {
   isOpen: boolean;
@@ -30,42 +30,6 @@ const ShipmentDetailsModal: React.FC<ShipmentDetailsModalProps> = ({
   onClose,
   shipment
 }) => {
-  const [isAccepting, setIsAccepting] = useState(false);
-  const [isAccepted, setIsAccepted] = useState(false);
-
-  const handleAcceptLoad = async () => {
-    setIsAccepting(true);
-    try {
-      const response = await fetch('/api/loads/accept', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          loadId: shipment.id,
-          carrierId: 'current-carrier-id', // Replace with actual carrier ID
-          carrierName: 'Current Carrier', // Replace with actual carrier name
-          acceptedAt: new Date().toISOString()
-        }),
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        setIsAccepted(true);
-        // Show success message
-        alert('Load accepted successfully! You will be contacted by the shipper soon.');
-      } else {
-        alert('Failed to accept load: ' + result.message);
-      }
-    } catch (error) {
-      console.error('Error accepting load:', error);
-      alert('Failed to accept load. Please try again.');
-    } finally {
-      setIsAccepting(false);
-    }
-  };
-
   if (!isOpen) return null;
 
   return (
@@ -220,27 +184,8 @@ const ShipmentDetailsModal: React.FC<ShipmentDetailsModalProps> = ({
           >
             Close
           </button>
-          <button 
-            onClick={handleAcceptLoad}
-            disabled={isAccepting || isAccepted}
-            className={`px-6 py-2 rounded-lg transition-colors flex items-center gap-2 ${
-              isAccepted 
-                ? 'bg-green-600 text-white cursor-not-allowed' 
-                : isAccepting
-                ? 'bg-gray-400 text-white cursor-not-allowed'
-                : 'bg-blue-600 text-white hover:bg-blue-700'
-            }`}
-          >
-            {isAccepted ? (
-              <>
-                <CheckCircle className="h-4 w-4" />
-                Load Accepted
-              </>
-            ) : isAccepting ? (
-              'Accepting...'
-            ) : (
-              'Accept Load'
-            )}
+          <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            Accept Load
           </button>
         </div>
       </div>
