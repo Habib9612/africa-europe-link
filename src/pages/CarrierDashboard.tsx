@@ -29,8 +29,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { ShipmentsList } from "@/components/shipments/ShipmentsList";
-import ShipmentDetailsModal from '../components/modals/ShipmentDetailsModal';
-import ContactShipperModal from '../components/modals/ContactShipperModal';
 
 interface Match {
   id: string;
@@ -68,10 +66,6 @@ const CarrierDashboard = () => {
   const { user } = useAuth();
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(false);
-  const [selectedShipmentForDetails, setSelectedShipmentForDetails] = useState<any>(null);
-  const [selectedShipper, setSelectedShipper] = useState<any>(null);
-  const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [showContactModal, setShowContactModal] = useState(false);
 
   const stats = [
     {
@@ -114,49 +108,18 @@ const CarrierDashboard = () => {
     setLoading(true);
     try {
       const { data, error } = await supabase
-        .from('shipments')
-        .select('*')
-        .is('carrier_id', null)
-        .eq('status', 'posted')
-        .order('created_at', { ascending: false })
+        .from('load_matches')
+        .select(`
+          *,
+          shipments(origin_city, origin_state, destination_city, destination_state, commodity, weight, rate, pickup_date)
+        `)
+        .eq('carrier_id', user.id)
+        .eq('status', 'pending')
+        .order('match_score', { ascending: false })
         .limit(10);
 
       if (error) throw error;
-      
-      // Transform shipment data to match interface with mock AI insights
-      const transformedMatches: Match[] = (data || []).map((shipment: any) => ({
-        id: shipment.id,
-        shipment_id: shipment.id,
-        match_score: Math.floor(Math.random() * 40) + 60, // Random score 60-100
-        distance_km: Math.floor(Math.random() * 800) + 200, // Random distance 200-1000km
-        estimated_cost: shipment.rate || Math.floor(Math.random() * 2000) + 500,
-        estimated_duration_hours: Math.floor(Math.random() * 20) + 8, // 8-28 hours
-        compatibility_factors: {
-          distance_score: Math.floor(Math.random() * 30) + 70,
-          capacity_match: Math.floor(Math.random() * 30) + 70,
-          equipment_match: Math.floor(Math.random() * 30) + 70,
-          timing_score: Math.floor(Math.random() * 30) + 70
-        },
-        ai_insights: {
-          profitability: Math.floor(Math.random() * 40) + 60,
-          efficiency: Math.floor(Math.random() * 40) + 60,
-          reliability: Math.floor(Math.random() * 40) + 60,
-          recommendation: ['Highly Recommended', 'Good Match', 'Consider'][Math.floor(Math.random() * 3)]
-        },
-        status: shipment.status,
-        shipments: {
-          origin_city: shipment.origin_city || 'Unknown',
-          origin_state: shipment.origin_state || '',
-          destination_city: shipment.destination_city || 'Unknown',
-          destination_state: shipment.destination_state || '',
-          commodity: shipment.commodity || 'General Cargo',
-          weight: shipment.weight || 0,
-          rate: shipment.rate || 0,
-          pickup_date: shipment.pickup_date || new Date().toISOString()
-        }
-      }));
-      
-      setMatches(transformedMatches);
+      setMatches((data || []) as unknown as Match[]);
     } catch (error) {
       console.error('Error fetching matches:', error);
       toast.error('Failed to fetch matches');
@@ -167,34 +130,28 @@ const CarrierDashboard = () => {
 
   const viewMatchDetails = async (matchId: string) => {
     try {
-      // Create a detailed view modal or navigate to details page
-      // For now, we'll just show a success message and log the action
-      console.log('Viewing details for match:', matchId);
+      await supabase
+        .from('load_matches')
+        .update({ status: 'viewed' })
+        .eq('id', matchId);
       
-      // In a real implementation, this would open a modal or navigate to a details page
-      // showing comprehensive information about the shipment, route optimization, 
-      // shipper details, pickup/delivery requirements, etc.
-      
+      // Refresh matches
+      fetchMatches();
       toast.success('Match details viewed');
     } catch (error) {
-      console.error('Error viewing match details:', error);
-      toast.error('Failed to view match details');
+      console.error('Error updating match status:', error);
     }
   };
 
   const contactShipper = async (matchId: string) => {
     try {
-      // In a real implementation, this would:
-      // 1. Create a conversation/message thread
-      // 2. Send notification to shipper
-      // 3. Update match status to 'contacted'
-      // 4. Possibly open a messaging interface
+      await supabase
+        .from('load_matches')
+        .update({ status: 'contacted' })
+        .eq('id', matchId);
       
-      console.log('Contacting shipper for match:', matchId);
-      
-      // For demo purposes, we'll simulate the contact action
-      // In production, this would integrate with messaging system
-      
+      // Refresh matches
+      fetchMatches();
       toast.success('Shipper contacted successfully');
     } catch (error) {
       console.error('Error contacting shipper:', error);
@@ -284,23 +241,12 @@ const CarrierDashboard = () => {
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="available" className="mt-6">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <Search className="h-5 w-5 mr-2 text-primary" />
-                      Available Shipments
-                      <Badge variant="secondary" className="ml-3">
-                        Live
-                      </Badge>
-                    </div>
-                  </div>
-                  <ShipmentsList 
-                    showMyShipments={false}
-                    onRefresh={() => {
-                      console.log('CarrierDashboard: Shipments list refreshed');
-                    }} 
-                  />
-                </div>
+                <ShipmentsList 
+                  showMyShipments={false}
+                  onRefresh={() => {
+                    console.log('CarrierDashboard: Shipments list refreshed');
+                  }} 
+                />
               </TabsContent>
               <TabsContent value="ai-matches" className="mt-6">
                 <div className="space-y-4">
@@ -380,7 +326,7 @@ const CarrierDashboard = () => {
                         </div>
                         <div className="text-center p-3 bg-gradient-card rounded-lg">
                           <Star className="h-5 w-5 text-primary mx-auto mb-1" />
-                          <div className="text-lg font-bold">{Math.round(match.ai_insights?.profitability || 0)}%</div>
+                          <div className="text-lg font-bold">{Math.round(match.ai_insights.profitability)}%</div>
                           <div className="text-xs text-muted-foreground">Profit Score</div>
                         </div>
                       </div>
@@ -395,23 +341,23 @@ const CarrierDashboard = () => {
                           <div>
                             <div className="flex justify-between text-sm mb-1">
                               <span>Profitability</span>
-                              <span>{Math.round(match.ai_insights?.profitability || 0)}%</span>
+                              <span>{Math.round(match.ai_insights.profitability)}%</span>
                             </div>
-                            <Progress value={match.ai_insights?.profitability || 0} className="h-2" />
+                            <Progress value={match.ai_insights.profitability} className="h-2" />
                           </div>
                           <div>
                             <div className="flex justify-between text-sm mb-1">
                               <span>Efficiency</span>
-                              <span>{Math.round(match.ai_insights?.efficiency || 0)}%</span>
+                              <span>{Math.round(match.ai_insights.efficiency)}%</span>
                             </div>
-                            <Progress value={match.ai_insights?.efficiency || 0} className="h-2" />
+                            <Progress value={match.ai_insights.efficiency} className="h-2" />
                           </div>
                           <div>
                             <div className="flex justify-between text-sm mb-1">
                               <span>Reliability</span>
-                              <span>{Math.round(match.ai_insights?.reliability || 0)}%</span>
+                              <span>{Math.round(match.ai_insights.reliability)}%</span>
                             </div>
-                            <Progress value={match.ai_insights?.reliability || 0} className="h-2" />
+                            <Progress value={match.ai_insights.reliability} className="h-2" />
                           </div>
                         </div>
                       </div>
@@ -419,40 +365,19 @@ const CarrierDashboard = () => {
                       {/* Actions */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                          <Badge variant={getRecommendationVariant(match.ai_insights?.recommendation || 'unknown') as any}>
+                          <Badge variant={getRecommendationVariant(match.ai_insights.recommendation) as any}>
                             <Star className="h-3 w-3 mr-1" />
-                            {match.ai_insights?.recommendation || 'No recommendation'}
+                            {match.ai_insights.recommendation}
                           </Badge>
                           <span className="text-sm text-muted-foreground">
-                            Pickup: {match.shipments?.pickup_date ? new Date(match.shipments.pickup_date).toLocaleDateString() : 'TBD'}
+                            Pickup: {new Date(match.shipments.pickup_date).toLocaleDateString()}
                           </span>
                         </div>
                         <div className="flex space-x-2">
                           <Button 
                             variant="outline" 
                             size="sm"
-                            onClick={() => {
-                              setSelectedShipmentForDetails({
-                                id: match.shipment_id,
-                                origin: 'Tangier, Morocco',
-                                destination: 'Quelimane, Mozambique',
-                                pickupDate: match.shipments?.pickup_date || '2025-08-15',
-                                deliveryDate: '2025-08-25',
-                                cargoType: match.shipments?.commodity || 'General Cargo',
-                                weight: match.shipments?.weight?.toString() + ' kg' || '15,000 kg',
-                                dimensions: '12m x 2.5m x 2.8m',
-                                revenue: '€' + match.estimated_cost,
-                                matchScore: match.match_score + '%',
-                                distance: match.distance_km + ' km',
-                                requirements: ['Temperature controlled', 'GPS tracking', 'Insurance required'],
-                                shipper: {
-                                  name: 'Ahmed Hassan',
-                                  company: 'Atlas Trading Co.',
-                                  rating: 4
-                                }
-                              });
-                              setShowDetailsModal(true);
-                            }}
+                            onClick={() => viewMatchDetails(match.id)}
                           >
                             <Eye className="h-4 w-4 mr-1" />
                             View Details
@@ -460,20 +385,7 @@ const CarrierDashboard = () => {
                           <Button 
                             variant="success" 
                             size="sm"
-                            onClick={() => {
-                              setSelectedShipper({
-                                id: 'shipper-001',
-                                name: 'Ahmed Hassan',
-                                company: 'Atlas Trading Co.',
-                                email: 'ahmed@atlastrading.com',
-                                phone: '+212-555-0123',
-                                rating: 4,
-                                totalShipments: 89,
-                                responseTime: '1.5 hours',
-                                preferredContact: 'email'
-                              });
-                              setShowContactModal(true);
-                            }}
+                            onClick={() => contactShipper(match.id)}
                           >
                             Contact Shipper
                             <ArrowRight className="h-4 w-4 ml-1" />
@@ -490,20 +402,6 @@ const CarrierDashboard = () => {
             </Tabs>
           </CardContent>
         </Card>
-        
-        {/* Modals */}
-        <ShipmentDetailsModal
-          isOpen={showDetailsModal}
-          onClose={() => setShowDetailsModal(false)}
-          shipment={selectedShipmentForDetails}
-        />
-        
-        <ContactShipperModal
-          isOpen={showContactModal}
-          onClose={() => setShowContactModal(false)}
-          shipper={selectedShipper}
-          shipmentId={selectedShipmentForDetails?.id || 'SHIP-001'}
-        />
       </div>
     </DashboardLayout>
   );

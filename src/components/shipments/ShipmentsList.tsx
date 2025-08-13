@@ -66,10 +66,7 @@ export function ShipmentsList({ onRefresh, showMyShipments = false }: ShipmentsL
         if (profile?.role === 'shipper') {
           const { data: shipments, error } = await supabase
             .from('shipments')
-            .select(`
-              *,
-              shipper:profiles!shipper_id(full_name)
-            `)
+            .select('*')
             .eq('shipper_id', user?.id)
             .order('created_at', { ascending: false });
           
@@ -78,10 +75,7 @@ export function ShipmentsList({ onRefresh, showMyShipments = false }: ShipmentsL
         } else if (profile?.role === 'carrier') {
           const { data: shipments, error } = await supabase
             .from('shipments')
-            .select(`
-              *,
-              shipper:profiles!shipper_id(full_name)
-            `)
+            .select('*')
             .eq('carrier_id', user?.id)
             .order('created_at', { ascending: false });
           
@@ -92,12 +86,8 @@ export function ShipmentsList({ onRefresh, showMyShipments = false }: ShipmentsL
         // Show available shipments for carriers
         const { data: shipments, error } = await supabase
           .from('shipments')
-          .select(`
-            *,
-            shipper:profiles!shipper_id(full_name)
-          `)
+          .select('*')
           .eq('status', 'posted')
-          .is('carrier_id', null)
           .order('created_at', { ascending: false });
         
         if (error) throw error;
@@ -273,7 +263,7 @@ export function ShipmentsList({ onRefresh, showMyShipments = false }: ShipmentsL
                     </div>
                     <div className="flex items-center gap-1">
                       <Users className="h-4 w-4" />
-                      <span>{shipment.shipper?.full_name || 'Unknown Shipper'}</span>
+                      <span>{shipment.shipper.full_name}</span>
                     </div>
                     {shipment.bid_count > 0 && (
                       <div className="flex items-center gap-1">
